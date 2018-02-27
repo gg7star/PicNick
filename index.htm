@@ -1,0 +1,212 @@
+<html>
+  <head>
+    <style>
+       #map {
+        height: 725px;
+        width: 100%;
+       }
+	   .rotate90 {
+    	-webkit-transform: rotate(90deg);
+    	-moz-transform: rotate(90deg);
+    	-o-transform: rotate(90deg);
+    	-ms-transform: rotate(90deg);
+    	transform: rotate(90deg);
+		}
+    </style>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+  	<title>PicNick Test Database Viewer</title>
+  </head>
+  <body>
+    <h3>PicNick Test Database Viewer</h3>
+    <hr />
+    <div id="keyDIV"></div>
+	<div id="map"></div>
+  	<script src="https://www.gstatic.com/firebasejs/4.1.2/firebase.js"></script>
+	<script>
+  	// Initialize Firebase
+  	var config = {
+    	apiKey: "AIzaSyB7qx71V9N8PfDtWkBkzv2DEi_j8GaqQg4",
+    	authDomain: "picnick-test-database.firebaseapp.com",
+    	databaseURL: "https://picnick-test-database.firebaseio.com",
+    	projectId: "picnick-test-database",
+    	storageBucket: "picnick-test-database.appspot.com",
+    	messagingSenderId: "233513971727"
+ 		};
+  	firebase.initializeApp(config);
+	</script>
+    <script>
+    // Create the initial map
+    function initMap() {
+		var initialloc = {lat: 39.211147, lng: -97.942848};
+		var unverifiedicon = 'images/unverifiedtable_1.png'
+		var verifiedicon = 'images/verifiedtable_1.png'
+    	var map = new google.maps.Map(document.getElementById('map'), {
+    		center: initialloc,
+    		zoom: 5
+		});
+    	// add a single infoWindow outside of the loop that creates the markers
+    	var infoWindow = new google.maps.InfoWindow();
+		//loop through the database and add a marker to the map for each table location
+		//assign the database UID that was created by the push method as the marker ID
+    	var ref = firebase.database().ref();
+    	ref.on("child_added", function(snapshot) {
+				var key = snapshot.key;
+				var data = snapshot.val();
+				var lat = data.latitude;
+				var lng = data.longitude;
+				console.log('child added');
+				var vfd = String(data.verified);
+				if(vfd == "false"){
+					tableicon = unverifiedicon;
+				} else {
+					tableicon = verifiedicon;
+				}
+				var position = new google.maps.LatLng(lat,lng);
+				var marker = new google.maps.Marker({
+            		position: position,
+            		map: map,
+            		id: key,
+            		icon: tableicon
+        		});
+				//Add a listener to detect user "clicks" on a marker
+				marker.addListener('click', function() {
+        			var tableref = firebase.database().ref().child(marker.id)
+					console.log('tableref:',tableref);
+					console.log('marker ID:', marker.id)
+        			tableref.once("value")
+        				.then(function(snapshot){
+        				var tabledata = snapshot.val();						
+						var tablenumimages = snapshot.child("images").numChildren();
+						console.log('tablenumimages:', tablenumimages);
+						var tableimage1link;
+						var tableimagesref = tableref.child("images");
+						console.log('tableimagesref:', tableimagesref);
+						var tableimagewidth;
+						var tableimageheight;
+						var tableimageclass;
+						var tableimagekey;
+						tableimagesref.once("child_added", function(snapshot) {
+							tableimagekey = snapshot.key;
+							tableimage1link = snapshot.val();
+							console.log('tableimagekey:',tableimagekey,'tableimage1link:', tableimage1link);
+//							tableimagewidth = tableimagedata.imageWidth;
+//							tableimageheight = tableimagedata.imageHeight;
+//							if((tableimagewidth/tableimageheight >= 1)||(tableimagewidth === undefined)){
+							tableimageclass = ' class=""';
+//							} else
+//								tableimageclass = ' class="rotate90"'
+//  							console.log(tableimage1link, tableimagewidth, tableimageheight, tableimageclass );
+						});
+//        				var tablemultiple = String(tabledata.multiple);
+						var tablenumtables=String(tabledata.numberOfTables);
+						var tablereservation = String(tabledata.reserve);
+        				var tableverified = String(tabledata.verified);
+        				var tablecovered = String(tabledata.covered);
+        				var tablewater = String(tabledata.water);
+        				var tablerestrooms = String(tabledata.restroom);
+        				var tablewifi = String(tabledata.wifi);
+        				var tablehandicap = String(tabledata.handicap);
+        				var tablepet = String(tabledata.pet);
+        				var tablerv = String(tabledata.rv);
+        				var tablevending = String(tabledata.vending);
+        				console.log('# of tables:', tablenumtables, 'number of images:', tablenumimages, 'key:',tableimagekey, 'link: ', tableimage1link);
+        				if(tableverified == "true"){
+        					verified = "**Verified**";
+        				} else {
+        					verified = "";
+        				}
+        				//if(tablemultiple == "true"){
+        				//	multiple = tablenumtables+"<br>";
+        				//} else {
+        				//	multiple = "Single Table<br>";
+        				//}
+        				if(tablecovered == "true"){
+        					if(tablenumtables !=1){
+        						covered = "Covered Tables<br>";
+        					} else {
+        						covered = "Covered Table<br>";
+							}
+        				} else {
+        					covered = "<nobr></nobr>";
+        				}
+						console.log(tablecovered, covered);
+        				if(tablewater == "true"){
+        					water = "Water<br>";
+        				} else {
+        					water = "<nobr></nobr>";
+        				}
+        				if(tablerestrooms == "true"){
+        					restrooms = "Restrooms<br>";
+        				} else {
+        					restrooms = "<nobr></nobr>";
+        				}
+        				if(tablewifi == "true"){
+        					wifi = "WiFi<br>";
+        				} else {
+        					wifi = "<nobr></nobr>";
+        				}
+        				if(tablehandicap == "true"){
+        					handicap = "Handicap Facilities<br>";
+        				} else {
+        					handicap = "<nobr></nobr>";
+        				}
+        				if(tablepet == "true"){
+        					pet = "Pet Area<br>";
+        				} else {
+        					pet = "<nobr></nobr>";
+        				}
+        				if(tablerv == "true"){
+        					rv = "RV Area<br>";
+        				} else {
+        					rv = "<nobr></nobr>";
+        				}
+        				if(tablevending == "true"){
+        					vending = "Vending Machines<br>";
+        				} else {
+        					vending = "<nobr></nobr>";
+        				}
+    					//create template for infoWindow content
+    					var infoWindowcontent = 
+    					'<div id="content">'+
+    					'<table border="0" cellspacing="10" width="330" height="210">'+
+							'<tr>'+
+	  							'<td align="center" height="10" style="color:#090"><b>'+verified+'</b></td>'+
+	  							'<td width="118" rowspan="2" align="left" valign="middle" height="200"'+
+								'id="ammenities">'+
+//									multiple+
+									tablenumtables+"<br>"+
+									covered+
+									water+
+									restrooms+
+									wifi+
+									handicap+
+									pet+
+									rv+
+									vending+
+								 '</td>'+
+						  	'</tr>'+
+							'<tr>'+
+								'<td width="188" align="center">'+
+								'<img style="image-orientation: from-image" width="100%" src='+tableimage1link+tableimageclass+'>'+
+								'</td>'+
+							'</tr>'
+						'</table>'+
+						'</div>';
+        				infoWindow.setContent(infoWindowcontent);		
+          				infoWindow.open(map, marker);
+        			});
+        		});
+        		//Add a listener to close the infoWindow if a user clicks on the map
+    			google.maps.event.addListener(map,'click', function(){ 
+    				infoWindow.close();
+    			});
+		});
+    };
+    </script>
+    <script async defer 
+	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB7qx71V9N8PfDtWkBkzv2DEi_j8GaqQg4&callback=initMap">
+	</script>
+  </body>
+  </html>
+  
