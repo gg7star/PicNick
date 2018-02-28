@@ -256,7 +256,6 @@
               if (comments === undefined) {
                 comments = 0;
               } else {
-                console.log("=== comments: ", comments, Object.keys(comments).length);
                 comments = Object.keys(comments).length;
               }
 
@@ -286,7 +285,7 @@
       								'</td>'+
       							'</tr>' +
                     '<tr>'+
-                      '<td>'+
+                      '<td onclick="startsDetailView()">'+
                         '<ul class="rating" style="display: block; text-align: left; padding: 0; margin: 1px 0 2px; vertical-align: middle; list-style: none">' +
                             starts[0] +
                             starts[1] +
@@ -326,15 +325,17 @@
       var tableimageheight;
       var tableimagekey;
       var imageviewhtml = '';
+
       for (var i = 0; i < imagekeys.length; i++) {
         imageviewhtml += '<a href="' + images[imagekeys[i]] + '" data-lightbox="roadtrip">' +
           '<img id="gm-style-image" style="image-orientation: from-image" width="100%" src="' +
             images[imagekeys[i]] + '"' + (i > 0 ? ' hidden' : '') + '></a>';
       }
+
       return imageviewhtml;
     }
 
-    function startsDetailView() {
+    function imageDetailView() {
       var images = gtabledata.images;
       var numberofimages = Object.keys(images).length;
       var imagekeys = Object.keys(images)
@@ -347,23 +348,64 @@
       var tableimageclass;
       var tableimagekey;
 
-      // var imageviewhtml = '<div class="gallery"><ul class="images">';
-      // for (var i = 0; i < imagekeys.length; i++) {
-      //   imageviewhtml += '<li class="image">' +
-      //     '<a rel="lightbox-mygallery" href="' + images[imagekeys[i]] + '" title="tallest, deepest: Lovely photo of perth during the daytime.">' +
-      //       '<img src="' + images[imagekeys[i]] + '" height="300" width="300">' +
-      //     '</a></li>';
-      // }
-      // imageviewhtml += '</ul></div>';
-      // $("#images-detail-view").append(imageviewhtml);
-      //
-      // $("#images-detail-view").lightbox_me({
-      //   centered: true,
-      //   preventScroll: true, onLoad: function() {
-      //     $("#images-detail-view").find("input:first").focus();
-      //   }
-      // });
+      var imageviewhtml = '<div class="gallery"><ul class="images">';
+      for (var i = 0; i < imagekeys.length; i++) {
+        imageviewhtml += '<li class="image">' +
+          '<a rel="lightbox-mygallery" href="' + images[imagekeys[i]] + '" title="tallest, deepest: Lovely photo of perth during the daytime.">' +
+            '<img src="' + images[imagekeys[i]] + '" height="300" width="300">' +
+          '</a></li>';
+      }
+      imageviewhtml += '</ul></div>';
+      $("#images-detail-view").append(imageviewhtml);
+
+      $("#images-detail-view").lightbox_me({
+        centered: true,
+        preventScroll: true, onLoad: function() {
+          $("#images-detail-view").find("input:first").focus();
+        }
+      });
     }
+
+    function startsDetailView() {
+      var rating = gtabledata.rating;
+      var avgstars = rating.avgstars;
+      var strAvgstars = Number.parseFloat(avgstars).toFixed(2);
+      // Set stars
+      var starts = new Array(5);
+      for (var i = 0; i < 5; i++) {
+        if (i < avgstars) {
+          starts[i] = '<li style="display: inline-block; padding: 0 0px; letter-spacing: 12px;"><a href="#" style="text-decoration: none; font-size: 24px; color: #fb9000eb"><i class="fa fa-star" aria-hidden="true"></i></a></li>'
+        } else {
+          starts[i] = '<li style="display: inline-block; padding: 0 0px; letter-spacing: 12px;"><a href="#" style="text-decoration: none; font-size: 24px; color: #fb9000eb"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>'
+        }
+      }
+      // Get comments
+      var comments = tabledata.comments
+      if (comments === undefined) {
+        comments = 0;
+      } else {
+        console.log("=== comments: ", comments, Object.keys(comments).length);
+        comments = Object.keys(comments).length;
+      }
+
+      var imageviewhtml = '<div class="gallery"><ul class="images">';
+      for (var i = 0; i < imagekeys.length; i++) {
+        imageviewhtml += '<li class="image">' +
+          '<a rel="lightbox-mygallery" href="' + images[imagekeys[i]] + '" title="tallest, deepest: Lovely photo of perth during the daytime.">' +
+            '<img src="' + images[imagekeys[i]] + '" height="300" width="300">' +
+          '</a></li>';
+      }
+      imageviewhtml += '</ul></div>';
+      $("#images-detail-view").append(imageviewhtml);
+
+      $("#images-detail-view").lightbox_me({
+        centered: true,
+        preventScroll: true, onLoad: function() {
+          $("#images-detail-view").find("input:first").focus();
+        }
+      });
+    }
+
     lightbox.option({
       'resizeDuration': 200,
       'wrapAround': true
