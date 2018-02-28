@@ -12,18 +12,90 @@
         -ms-transform: rotate(90deg);
         transform: rotate(90deg);
     	}
+      /* Gallery Styling */
+			.gallery .image-title,
+			.gallery .image-description,
+			.gallery .image-author,
+			.gallery .image-link {
+				display:none;
+			}
+
+			.gallery
+			{
+				width: 100%;
+				text-align: center;
+				margin-left: auto;
+				margin-right: auto;
+				padding: none;
+			}
+
+			.gallery ul.images
+			{
+				list-style-type: none;
+				border: none;
+				padding: none;
+			}
+
+			.gallery ul.images li.image
+			{
+				display: inline;
+				line-height: 0;
+			}
+
+			.gallery ul.images li.image a
+			{
+				text-decoration: none;
+				color: inherit;
+				cursor: pointer;
+				margin: 14px;
+				display: inline-block;
+				background: white;
+				padding: 3px;
+				line-height: 0;
+				-webkit-border-radius: 4px 4px;
+				-moz-border-radius: 4px 4px;
+				border-radius: 4px 4px;
+				-moz-box-shadow: 0px 0px 8px #AAA;
+				-webkit-box-shadow: 0px 0px 8px #AAA;
+				box-shadow: 0px 0px 8px #AAA;
+				-webkit-transition: -webkit-box-shadow 0.1s ease-out;
+				-moz-transition: -webkit-box-shadow 0.1s ease-out;
+				-o-transition: -webkit-box-shadow 0.1s ease-out;
+				transition: -webkit-box-shadow 0.1s ease-out;
+			}
+
+			.gallery ul.images li.image a img
+			{
+				border: none;
+				padding: none;
+				-webkit-border-radius: 4px 4px;
+				-moz-border-radius: 4px 4px;
+				border-radius: 4px 4px;
+			}
+
+			.gallery ul.images li.image a:hover
+			{
+				-moz-box-shadow: 0px 0px 8px #222;
+				-webkit-box-shadow: 0px 0px 8px #222;
+				box-shadow: 0px 0px 8px #222;
+			}
     </style>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  	<title>PicNick Test Database Viewer</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="js/jquery.lightbox_me.js"></script>
+    <title>PicNick Test Database Viewer</title>
   </head>
   <body>
     <h3>PicNick Test Database Viewer</h3>
     <hr />
     <div id="keyDIV"></div>
 	<div id="map"></div>
-  	<script src="https://www.gstatic.com/firebasejs/4.1.2/firebase.js"></script>
+  <div id="images-detail-view"></div>
+  <div id="stars-detail-view"></div>
+  <div id="comments-detail-view"></div>
+	<script src="https://www.gstatic.com/firebasejs/4.1.2/firebase.js"></script>
 	<script>
   	// Initialize Firebase
   	var config = {
@@ -37,17 +109,18 @@
   	firebase.initializeApp(config);
 	</script>
     <script>
+    var gtabledata = null;
     // Create the initial map
     function initMap() {
 		var initialloc = {lat: 39.211147, lng: -97.942848};
 		var unverifiedicon = 'images/unverifiedtable_1.png'
 		var verifiedicon = 'images/verifiedtable_1.png'
-    	var map = new google.maps.Map(document.getElementById('map'), {
-    		center: initialloc,
-    		zoom: 5
-		});
+  	var map = new google.maps.Map(document.getElementById('map'), {
+            		center: initialloc,
+            		zoom: 5
+          		});
     	// add a single infoWindow outside of the loop that creates the markers
-    	var infoWindow = new google.maps.InfoWindow();
+  	var infoWindow = new google.maps.InfoWindow();
 		//loop through the database and add a marker to the map for each table location
 		//assign the database UID that was created by the push method as the marker ID
     	var ref = firebase.database().ref();
@@ -169,6 +242,7 @@
       					vending = "<nobr></nobr>";
       				}
               // Get stars
+              gtabledata = tabledata;
               var rating = tabledata.rating;
               var avgstars = rating.avgstars;
               var strAvgstars = Number.parseFloat(avgstars).toFixed(2);
@@ -212,7 +286,7 @@
       						  '</tr>'+
       							'<tr>'+
       								'<td width="188" align="center">'+
-      								  '<img style="image-orientation: from-image" width="100%" src='+tableimage1link+tableimageclass+'>'+
+      								  '<img id="gm-style-image" style="image-orientation: from-image" width="100%" src='+tableimage1link+tableimageclass+' onclick="imagesDetailView()">'+
       								'</td>'+
       							'</tr>' +
                     '<tr>'+
@@ -246,8 +320,43 @@
     		});
 		  });
     };
-    </script>
-    <script async defer
+
+    // $('a:has(img)').lightbox();
+
+    function imagesDetailView() {
+      console.log("==== clicked image: ", gtabledata);
+      var images = gtabledata.images;
+      var numberofimages = Object.keys(images).length;
+      var imagekeys = Object.keys(images)
+      console.log('numberofimages:', numberofimages);
+      console.log('imagekeys:', Object.keys(images));
+      console.log('images:', images);
+      console.log('images1:', images[imagekeys[0]]);
+      var tableimagewidth;
+      var tableimageheight;
+      var tableimageclass;
+      var tableimagekey;
+
+      imageviewhtml = '<div class="gallery"><ul class="images">';
+      for (var i = 0; i < imagekeys.length; i++) {
+        imageviewhtml += '<li class="image">' +
+          '<a rel="lightbox-mygallery" href="' + images[imagekeys[i]] + '" title="tallest, deepest: Lovely photo of perth during the daytime.">' +
+            '<img src="' + images[imagekeys[i]] + '" height="300" width="300">' +
+          '</a></li>';
+      }
+      imageviewhtml += '</ul></div>';
+      $("#images-detail-view").append(imageviewhtml);
+
+      $("#images-detail-view").lightbox_me({
+        centered: true,
+        preventScroll: true, onLoad: function() {
+          $("#images-detail-view").find("input:first").focus();
+        }
+      });
+    }
+
+  </script>
+  <script async defer
 	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB7qx71V9N8PfDtWkBkzv2DEi_j8GaqQg4&callback=initMap">
 	</script>
   </body>
