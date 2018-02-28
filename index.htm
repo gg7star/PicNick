@@ -1,20 +1,47 @@
 <html>
   <head>
     <style>
-       #map {
+      #map {
         height: 725px;
         width: 100%;
-       }
-	   .rotate90 {
-    	-webkit-transform: rotate(90deg);
-    	-moz-transform: rotate(90deg);
-    	-o-transform: rotate(90deg);
-    	-ms-transform: rotate(90deg);
-    	transform: rotate(90deg);
-		}
+      }
+  	  .rotate90 {
+        -webkit-transform: rotate(90deg);
+        -moz-transform: rotate(90deg);
+        -o-transform: rotate(90deg);
+        -ms-transform: rotate(90deg);
+        transform: rotate(90deg);
+    	}
+      .rating {
+        display: block;
+        text-align: left;
+        padding: 0;
+        margin: 1px 0 2px;
+        vertical-align: middle;
+        list-style: none
+      }
+      .rating li {
+        display: inline-block;
+        padding: 0 0px;
+        letter-spacing: 12px;
+      }
+      .rating li a {
+        text-decoration: none;
+        font-size: 24px;
+        color: #fb9000eb
+      }
+      .td-star-value {
+        color: #090;
+        font-size: 19px;
+        text-align: -webkit-left;
+        vertical-align: middle;
+        font-weight: 100;
+        letter-spacing: 1px;
+      }
     </style>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   	<title>PicNick Test Database Viewer</title>
   </head>
   <body>
@@ -51,7 +78,7 @@
 		//assign the database UID that was created by the push method as the marker ID
     	var ref = firebase.database().ref();
     	ref.on("child_added", function(snapshot) {
-				var key = snapshot.key;
+        var key = snapshot.key;
 				var data = snapshot.val();
 				var lat = data.latitude;
 				var lng = data.longitude;
@@ -64,149 +91,190 @@
 				}
 				var position = new google.maps.LatLng(lat,lng);
 				var marker = new google.maps.Marker({
-            		position: position,
-            		map: map,
-            		id: key,
-            		icon: tableicon
-        		});
+                        		position: position,
+                        		map: map,
+                        		id: key,
+                        		icon: tableicon
+                    		});
 				//Add a listener to detect user "clicks" on a marker
 				marker.addListener('click', function() {
-        			var tableref = firebase.database().ref().child(marker.id)
+    			var tableref = firebase.database().ref().child(marker.id)
 					console.log('tableref:',tableref);
 					console.log('marker ID:', marker.id)
-        			tableref.once("value")
-        				.then(function(snapshot){
-        				var tabledata = snapshot.val();						
-						var tablenumimages = snapshot.child("images").numChildren();
-						console.log('tablenumimages:', tablenumimages);
-						var tableimage1link;
-						var tableimagesref = tableref.child("images");
-						console.log('tableimagesref:', tableimagesref);
-						var tableimagewidth;
-						var tableimageheight;
-						var tableimageclass;
-						var tableimagekey;
-						tableimagesref.once("child_added", function(snapshot) {
-							tableimagekey = snapshot.key;
-							tableimage1link = snapshot.val();
-							console.log('tableimagekey:',tableimagekey,'tableimage1link:', tableimage1link);
+    			tableref.once("value")
+    				.then(function(snapshot){
+    				  var tabledata = snapshot.val();
+              var tablenumimages = snapshot.child("images").numChildren();
+  						console.log('tablenumimages:', tablenumimages);
+  						var tableimage1link;
+  						var tableimagesref = tableref.child("images");
+  						console.log('tableimagesref:', tableimagesref);
+  						var tableimagewidth;
+  						var tableimageheight;
+  						var tableimageclass;
+  						var tableimagekey;
+
+						  tableimagesref.once("child_added", function(snapshot) {
+							  tableimagekey = snapshot.key;
+							  tableimage1link = snapshot.val();
+							  console.log('tableimagekey:',tableimagekey,'tableimage1link:', tableimage1link);
 //							tableimagewidth = tableimagedata.imageWidth;
 //							tableimageheight = tableimagedata.imageHeight;
 //							if((tableimagewidth/tableimageheight >= 1)||(tableimagewidth === undefined)){
-							tableimageclass = ' class=""';
+							  tableimageclass = ' class=""';
 //							} else
 //								tableimageclass = ' class="rotate90"'
 //  							console.log(tableimage1link, tableimagewidth, tableimageheight, tableimageclass );
-						});
+						  });
 //        				var tablemultiple = String(tabledata.multiple);
-						var tablenumtables=String(tabledata.numberOfTables);
-						var tablereservation = String(tabledata.reserve);
-        				var tableverified = String(tabledata.verified);
-        				var tablecovered = String(tabledata.covered);
-        				var tablewater = String(tabledata.water);
-        				var tablerestrooms = String(tabledata.restroom);
-        				var tablewifi = String(tabledata.wifi);
-        				var tablehandicap = String(tabledata.handicap);
-        				var tablepet = String(tabledata.pet);
-        				var tablerv = String(tabledata.rv);
-        				var tablevending = String(tabledata.vending);
-        				console.log('# of tables:', tablenumtables, 'number of images:', tablenumimages, 'key:',tableimagekey, 'link: ', tableimage1link);
-        				if(tableverified == "true"){
-        					verified = "**Verified**";
-        				} else {
-        					verified = "";
-        				}
-        				//if(tablemultiple == "true"){
-        				//	multiple = tablenumtables+"<br>";
-        				//} else {
-        				//	multiple = "Single Table<br>";
-        				//}
-        				if(tablecovered == "true"){
-        					if(tablenumtables !=1){
-        						covered = "Covered Tables<br>";
-        					} else {
-        						covered = "Covered Table<br>";
-							}
-        				} else {
-        					covered = "<nobr></nobr>";
-        				}
-						console.log(tablecovered, covered);
-        				if(tablewater == "true"){
-        					water = "Water<br>";
-        				} else {
-        					water = "<nobr></nobr>";
-        				}
-        				if(tablerestrooms == "true"){
-        					restrooms = "Restrooms<br>";
-        				} else {
-        					restrooms = "<nobr></nobr>";
-        				}
-        				if(tablewifi == "true"){
-        					wifi = "WiFi<br>";
-        				} else {
-        					wifi = "<nobr></nobr>";
-        				}
-        				if(tablehandicap == "true"){
-        					handicap = "Handicap Facilities<br>";
-        				} else {
-        					handicap = "<nobr></nobr>";
-        				}
-        				if(tablepet == "true"){
-        					pet = "Pet Area<br>";
-        				} else {
-        					pet = "<nobr></nobr>";
-        				}
-        				if(tablerv == "true"){
-        					rv = "RV Area<br>";
-        				} else {
-        					rv = "<nobr></nobr>";
-        				}
-        				if(tablevending == "true"){
-        					vending = "Vending Machines<br>";
-        				} else {
-        					vending = "<nobr></nobr>";
-        				}
+						  var tablenumtables=String(tabledata.numberOfTables);
+						  var tablereservation = String(tabledata.reserve);
+      				var tableverified = String(tabledata.verified);
+      				var tablecovered = String(tabledata.covered);
+      				var tablewater = String(tabledata.water);
+      				var tablerestrooms = String(tabledata.restroom);
+      				var tablewifi = String(tabledata.wifi);
+      				var tablehandicap = String(tabledata.handicap);
+      				var tablepet = String(tabledata.pet);
+      				var tablerv = String(tabledata.rv);
+      				var tablevending = String(tabledata.vending);
+      				console.log('# of tables:', tablenumtables, 'number of images:', tablenumimages, 'key:',tableimagekey, 'link: ', tableimage1link);
+      				if(tableverified == "true"){
+      					verified = "**Verified**";
+      				} else {
+      					verified = "";
+      				}
+      				//if(tablemultiple == "true"){
+      				//	multiple = tablenumtables+"<br>";
+      				//} else {
+      				//	multiple = "Single Table<br>";
+      				//}
+      				if(tablecovered == "true"){
+      					if(tablenumtables !=1){
+      						covered = "Covered Tables<br>";
+      					} else {
+      						covered = "Covered Table<br>";
+						    }
+      				} else {
+      					covered = "<nobr></nobr>";
+      				}
+					    console.log(tablecovered, covered);
+      				if(tablewater == "true"){
+      					water = "Water<br>";
+      				} else {
+      					water = "<nobr></nobr>";
+      				}
+      				if(tablerestrooms == "true"){
+      					restrooms = "Restrooms<br>";
+      				} else {
+      					restrooms = "<nobr></nobr>";
+      				}
+      				if(tablewifi == "true"){
+      					wifi = "WiFi<br>";
+      				} else {
+      					wifi = "<nobr></nobr>";
+      				}
+      				if(tablehandicap == "true"){
+      					handicap = "Handicap Facilities<br>";
+      				} else {
+      					handicap = "<nobr></nobr>";
+      				}
+      				if(tablepet == "true"){
+      					pet = "Pet Area<br>";
+      				} else {
+      					pet = "<nobr></nobr>";
+      				}
+      				if(tablerv == "true"){
+      					rv = "RV Area<br>";
+      				} else {
+      					rv = "<nobr></nobr>";
+      				}
+      				if(tablevending == "true"){
+      					vending = "Vending Machines<br>";
+      				} else {
+      					vending = "<nobr></nobr>";
+      				}
+              // Get stars
+              var rating = tabledata.rating;
+              var avgstars = rating.avgstars;
+              var strAvgstars = Number.parseFloat(avgstars).toFixed(2);
+              // Set stars
+              var starts = new Array(5);
+              for (var i = 0; i < 5; i++) {
+                if (i < avgstars) {
+                  starts[i] = '<li style="display: inline-block; padding: 0 0px; letter-spacing: 12px;"><a href="#" style="text-decoration: none; font-size: 24px; color: #fb9000eb"><i class="fa fa-star" aria-hidden="true"></i></a></li>'
+                } else {
+                  starts[i] = '<li style="display: inline-block; padding: 0 0px; letter-spacing: 12px;"><a href="#" style="text-decoration: none; font-size: 24px; color: #fb9000eb"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>'
+                }
+              }
+              // Get comments
+              var comments = tabledata.comments
+              if (comments === undefined) {
+                comments = 0;
+              } else {
+                console.log("=== comments: ", comments, Object.keys(comments).length);
+                comments = Object.keys(comments).length;
+              }
+
     					//create template for infoWindow content
-    					var infoWindowcontent = 
-    					'<div id="content">'+
-    					'<table border="0" cellspacing="10" width="330" height="210">'+
-							'<tr>'+
-	  							'<td align="center" height="10" style="color:#090"><b>'+verified+'</b></td>'+
-	  							'<td width="118" rowspan="2" align="left" valign="middle" height="200"'+
-								'id="ammenities">'+
-//									multiple+
-									tablenumtables+"<br>"+
-									covered+
-									water+
-									restrooms+
-									wifi+
-									handicap+
-									pet+
-									rv+
-									vending+
-								 '</td>'+
-						  	'</tr>'+
-							'<tr>'+
-								'<td width="188" align="center">'+
-								'<img style="image-orientation: from-image" width="100%" src='+tableimage1link+tableimageclass+'>'+
-								'</td>'+
-							'</tr>'
-						'</table>'+
-						'</div>';
-        				infoWindow.setContent(infoWindowcontent);		
-          				infoWindow.open(map, marker);
-        			});
-        		});
-        		//Add a listener to close the infoWindow if a user clicks on the map
-    			google.maps.event.addListener(map,'click', function(){ 
-    				infoWindow.close();
-    			});
-		});
+    					var infoWindowcontent =
+      					'<div id="content">'+
+        					'<table border="0" cellspacing="10" width="330" height="210">'+
+      							'<tr>'+
+      	  						'<td align="center" height="10" style="color:#090; letter-spacing: 2px;font-family: Arial; font-size: 23px;"><b>' + verified + '</b></td>' +
+      	  						'<td width="118" rowspan="2" align="left" valign="middle" height="200" style="font-size: 19px; font-weight: 100;letter-spacing: 1px;"' +
+                        'id="ammenities">'+
+      								// multiple+
+        									tablenumtables+"<br>"+
+        									covered+
+        									water+
+        									restrooms+
+        									wifi+
+        									handicap+
+        									pet+
+        									rv+
+        									vending+
+      							  '</td>'+
+      						  '</tr>'+
+      							'<tr>'+
+      								'<td width="188" align="center">'+
+      								  '<img style="image-orientation: from-image" width="100%" src='+tableimage1link+tableimageclass+'>'+
+      								'</td>'+
+      							'</tr>' +
+                    '<tr>'+
+                      '<td>'+
+                        '<ul class="rating" style="display: block; text-align: left; padding: 0; margin: 1px 0 2px; vertical-align: middle; list-style: none">' +
+                            starts[0] +
+                            starts[1] +
+                            starts[2] +
+                            starts[3] +
+                            starts[4] +
+            						'</ul>' +
+                      '</td>'+
+                      '<td class="td-star-value" style="color: #090; font-size: 19px; text-align: -webkit-left; vertical-align: middle; font-weight: 100; letter-spacing: 1px;">' +
+                        strAvgstars + ' stars' +
+                      '</td>' +
+                    '</tr>'+
+                    '<tr>' +
+                      '<td class="td-star-value" style="color: #090; font-size: 19px; text-align: -webkit-left; vertical-align: middle; font-weight: 100; letter-spacing: 1px;">' +
+                        comments + ' comments' +
+                      '</td>' +
+                    '</tr>' +
+      						'</table>'+
+    						'</div>';
+        			infoWindow.setContent(infoWindowcontent);
+          		infoWindow.open(map, marker);
+      			});
+      		});
+        	//Add a listener to close the infoWindow if a user clicks on the map
+    			google.maps.event.addListener(map,'click', function(){
+    			infoWindow.close();
+    		});
+		  });
     };
     </script>
-    <script async defer 
+    <script async defer
 	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB7qx71V9N8PfDtWkBkzv2DEi_j8GaqQg4&callback=initMap">
 	</script>
   </body>
   </html>
-  
