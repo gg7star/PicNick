@@ -281,12 +281,8 @@
       							  '</td>'+
       						  '</tr>'+
       							'<tr>'+
-      								'<td width="188" align="center">'+
-                        '<a href="' + tableimage1link + tableimageclass + ' data-lightbox="roadtrip">' +
-      								    '<img id="gm-style-image" style="image-orientation: from-image" width="100%" src=' +
-                            tableimage1link + tableimageclass +
-                          '>'+
-                        '</a>' +
+      								'<td width="188" align="center">' +
+                        addAllImagesTag(tabledata) +
       								'</td>'+
       							'</tr>' +
                     '<tr>'+
@@ -322,9 +318,23 @@
     };
 
     // $('a:has(img)').lightbox();
+    function addAllImagesTag(tabledata) {
+      var images = tabledata.images;
+      var numberofimages = Object.keys(images).length;
+      var imagekeys = Object.keys(images)
+      var tableimagewidth;
+      var tableimageheight;
+      var tableimagekey;
+      var imageviewhtml = '';
+      for (var i = 0; i < imagekeys.length; i++) {
+        imageviewhtml += '<a href="' + images[imagekeys[i]] + '" data-lightbox="roadtrip">' +
+          '<img id="gm-style-image" style="image-orientation: from-image" width="100%" src="' +
+            images[imagekeys[i]] + '"' + (i > 0 ? ' hidden' : '') + '></a>';
+      }
+      return imageviewhtml;
+    }
 
-    function imagesDetailView() {
-      console.log("==== clicked image: ", gtabledata);
+    function startsDetailView() {
       var images = gtabledata.images;
       var numberofimages = Object.keys(images).length;
       var imagekeys = Object.keys(images)
@@ -337,11 +347,6 @@
       var tableimageclass;
       var tableimagekey;
 
-      var imageviewhtml = '';
-      for (var i = 0; i < imagekeys.length; i++) {
-        imageviewhtml += '<a href="' + images[imagekeys[i]] + '" data-lightbox="roadtrip">Image #' + i + '</a>';
-      }
-      $("#images-detail-view").append(imageviewhtml);
       // var imageviewhtml = '<div class="gallery"><ul class="images">';
       // for (var i = 0; i < imagekeys.length; i++) {
       //   imageviewhtml += '<li class="image">' +
