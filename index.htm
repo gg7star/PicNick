@@ -12,67 +12,6 @@
         -ms-transform: rotate(90deg);
         transform: rotate(90deg);
     	}
-      /* Gallery Styling */
-     .gallery .image-title,
-     .gallery .image-description,
-     .gallery .image-author,
-     .gallery .image-link {
-       display:none;
-     }
-     .gallery
-     {
-       width: 100%;
-       text-align: center;
-       margin-left: auto;
-       margin-right: auto;
-       padding: none;
-     }
-     .gallery ul.images
-     {
-       list-style-type: none;
-       border: none;
-       padding: none;
-     }
-     .gallery ul.images li.image
-     {
-       display: inline;
-       line-height: 0;
-     }
-     .gallery ul.images li.image a
-     {
-       text-decoration: none;
-       color: inherit;
-       cursor: pointer;
-       margin: 14px;
-       display: inline-block;
-       background: white;
-       padding: 3px;
-       line-height: 0;
-       -webkit-border-radius: 4px 4px;
-       -moz-border-radius: 4px 4px;
-       border-radius: 4px 4px;
-       -moz-box-shadow: 0px 0px 8px #AAA;
-       -webkit-box-shadow: 0px 0px 8px #AAA;
-       box-shadow: 0px 0px 8px #AAA;
-       -webkit-transition: -webkit-box-shadow 0.1s ease-out;
-       -moz-transition: -webkit-box-shadow 0.1s ease-out;
-       -o-transition: -webkit-box-shadow 0.1s ease-out;
-       transition: -webkit-box-shadow 0.1s ease-out;
-     }
-     .gallery ul.images li.image a img
-     {
-       border: none;
-       padding: none;
-       -webkit-border-radius: 4px 4px;
-       -moz-border-radius: 4px 4px;
-       border-radius: 4px 4px;
-     }
-     .gallery ul.images li.image a:hover
-     {
-       -moz-box-shadow: 0px 0px 8px #222;
-       -webkit-box-shadow: 0px 0px 8px #222;
-       box-shadow: 0px 0px 8px #222;
-     }
     </style>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
@@ -333,37 +272,6 @@
       }
 
       return imageviewhtml;
-    }
-
-    function imageDetailView() {
-      var images = gtabledata.images;
-      var numberofimages = Object.keys(images).length;
-      var imagekeys = Object.keys(images)
-      console.log('numberofimages:', numberofimages);
-      console.log('imagekeys:', Object.keys(images));
-      console.log('images:', images);
-      console.log('images1:', images[imagekeys[0]]);
-      var tableimagewidth;
-      var tableimageheight;
-      var tableimageclass;
-      var tableimagekey;
-
-      var imageviewhtml = '<div class="gallery"><ul class="images">';
-      for (var i = 0; i < imagekeys.length; i++) {
-        imageviewhtml += '<li class="image">' +
-          '<a rel="lightbox-mygallery" href="' + images[imagekeys[i]] + '" title="tallest, deepest: Lovely photo of perth during the daytime.">' +
-            '<img src="' + images[imagekeys[i]] + '" height="300" width="300">' +
-          '</a></li>';
-      }
-      imageviewhtml += '</ul></div>';
-      $("#images-detail-view").append(imageviewhtml);
-
-      $("#images-detail-view").lightbox_me({
-        centered: true,
-        preventScroll: true, onLoad: function() {
-          $("#images-detail-view").find("input:first").focus();
-        }
-      });
     }
 
     function starsDetailView() {
