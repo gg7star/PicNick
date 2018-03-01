@@ -258,14 +258,18 @@
     // $('a:has(img)').lightbox();
     function addAllImagesTag(tabledata) {
       var images = tabledata.images;
-      var numberofimages = Object.keys(images).length;
-      var imagekeys = Object.keys(images)
-      var tableimagewidth;
-      var tableimageheight;
-      var tableimagekey;
       var imageviewhtml = '';
 
-      for (var i = 0; i < imagekeys.length; i++) {
+      var imagekeys;
+      var numberofimages;
+      if (images === undefined) {
+        numberofimages = 0;
+      } else {
+        imagekeys = Object.keys(images);
+        numberofimages = imagekeys.length;
+      }
+
+      for (var i = 0; i < numberofimages; i++) {
         imageviewhtml += '<a href="' + images[imagekeys[i]] + '" data-lightbox="roadtrip">' +
           '<img id="gm-style-image" style="image-orientation: from-image" width="100%" src="' +
             images[imagekeys[i]] + '"' + (i > 0 ? ' hidden' : '') + '></a>';
@@ -296,6 +300,10 @@
         commentkeys = Object.keys(comments);
         numberofcomments = commentkeys.length;
       }
+
+      console.log("==== comments: ", comments);
+      console.log("==== numberofcomments: ", numberofcomments);
+      console.log("==== commentkeys: ", commentkeys);
       // Create top. a table of average stars view
       var avgstartsviewhtml = '<div class="avgstars-detail-view-container" style="background: #d1f4cb; padding: 20px 20px 0px 20px;">';
       avgstartsviewhtml +=
