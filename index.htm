@@ -255,11 +255,8 @@
 		  });
     };
 
-    // $('a:has(img)').lightbox();
     function addAllImagesTag(tabledata) {
       var images = tabledata.images;
-      var imageviewhtml = '';
-
       var imagekeys;
       var numberofimages;
       if (images === undefined) {
@@ -269,6 +266,7 @@
         numberofimages = imagekeys.length;
       }
 
+      var imageviewhtml = '';
       for (var i = 0; i < numberofimages; i++) {
         imageviewhtml += '<a href="' + images[imagekeys[i]] + '" data-lightbox="roadtrip">' +
           '<img id="gm-style-image" style="image-orientation: from-image" width="100%" src="' +
@@ -279,116 +277,15 @@
     }
 
     function starsDetailView() {
-      var rating = gtabledata.rating;
-      var avgstars = rating.avgstars;
-      var strAvgstars = Number.parseFloat(avgstars).toFixed(2);
-      // Set stars
-      var starts = new Array(5);
-      for (var i = 0; i < 5; i++) {
-        if (i < avgstars) {
-          starts[i] = '<li style="display: inline-block; padding: 0 0px; letter-spacing: 12px;"><a href="#" style="text-decoration: none; font-size: 24px; color: #fb9000eb"><i class="fa fa-star" aria-hidden="true"></i></a></li>';
-        } else {
-          starts[i] = '<li style="display: inline-block; padding: 0 0px; letter-spacing: 12px;"><a href="#" style="text-decoration: none; font-size: 24px; color: #fb9000eb"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>';
-        }
-      }
-      // Get comments
-      var comments = gtabledata.comments
-      var commentkeys;
-      if (comments === undefined) {
-        numberofcomments = 0;
-      } else {
-        commentkeys = Object.keys(comments);
-        numberofcomments = commentkeys.length;
-      }
-
-      console.log("==== comments: ", comments);
-      console.log("==== numberofcomments: ", numberofcomments);
-      console.log("==== commentkeys: ", commentkeys);
       // Create top. a table of average stars view
-      var avgstartsviewhtml = '<div class="avgstars-detail-view-container" style="background: #d1f4cb; padding: 20px 20px 0px 20px;">';
-      avgstartsviewhtml +=
-          '<table class="table-avgstars-detail-view" border="0" style="background: white; width: 400px; padding: 20px 20px 0px 20px;">' +
-            '<tbody>' +
-              '<tr>'+
-                '<td style="font-size: 22px;">'+
-                  "Table Ratings" +
-                '</td>'+
-              '</tr>'+
-              '<tr class="tr-avgstars-detail-view" style="height: 40px;">' +
-                '<td class="td-avgstars-detail-view" style="width:50%;">' +
-                  '<ul class="rating" style="display: block; text-align: left; padding: 0; margin: 1px 0 2px; vertical-align: middle; list-style: none">' +
-                      starts[0] +
-                      starts[1] +
-                      starts[2] +
-                      starts[3] +
-                      starts[4] +
-                  '</ul>' +
-                '</td>'+
-                '<td class="td-star-value" style="color: #090; font-size: 19px; text-align: -webkit-left; vertical-align: middle; font-weight: 100; letter-spacing: 1px;">' +
-                  strAvgstars + ' stars' +
-                '</td>' +
-              '</tr>';
-        avgstartsviewhtml +=
-              '<tr>' +
-                '<td style="font-size: 22px;">' +
-                  strAvgstars + " out of 5 stars"
-                '</td>' +
-              '</tr>';
-             '</tbody>' +
-           '</table>' +
-         '</div>'; // avgstars-detail-view-container
-
-         // Create middle. a table of stars detail view
-         var startsviewhtml = '<div class="stars-detail-view-container" style="background: #d1f4cb; padding: 0px 20px 20px 20px;">';
-         startsviewhtml +=
-           '<table class="table-stars-detail-view" border="0" cellpadding="0" cellspacing="0" style="background: white; width: 400px; padding: 0px 20px 20px 20px;">' +
-             '<tbody>';
-          for (var i = 4; i >= 0; i --) {
-            startsviewhtml +=
-              '<tr>' +
-                '<td width="30%">' +
-                  fillStars(i + 1) +
-                '</td>' +
-                '<td class="td-star-value" style="color: #090; font-size: 19px; text-align: -webkit-left; vertical-align: middle; font-weight: 100; letter-spacing: 1px; padding-left: 13px;">' +
-                  (i == (avgstars - 1)  ? '1 ratings - 100%' : '0 ratings - 0%');
-                '</td>' +
-              '</tr>';
-          }
-
-         startsviewhtml +=
-              '</tbody>' +
-            '</table>' +
-          '</div>'; // stars-detail-view-container
-
+      var avgstartsviewhtml = createAverageStarDetailViewTable(gtabledata);
+      // Create middle. a table of stars detail view
+      var startsviewhtml = createStarsDetailViewTable(gtabledata);
       // Create bottom. a table of comments detail view
-      var commetsviewhtml = '<div class="comments-detail-view-container" style="background: #d1f4cb;  padding: 0px 20px 20px 20px;">';
-      commetsviewhtml +=
-          '<table class="table-detail-view" border="0" cellpadding="0" cellspacing="0" style="background: white; width: 400px; padding: 20px;border-collapse: collapse;">' +
-            '<tbody>'
-      for (var i = 0; i < 5; i ++) {
-        commetsviewhtml += '<tr classs="tr-comments-detail-view" style="height: 70px; border-bottom: 1px solid #ececec;">'
-        if (i < numberofcomments) {
-          var comment = comments[commentkeys[i]]['comment'];
-          var commentrating = comments[commentkeys[i]]['rating'];
-          commetsviewhtml +=
-            '<td classs="td-comments-detail-stars-view" style="width: 30%; vertical-align: top; padding: 16px 0px 10px 20px;">' +
-              fillStars(commentrating) +
-            '</td>'+
-            '<td class="td-comments-detail-comment-view" style="color: #090; font-size: 19px; text-align: -webkit-left; vertical-align: middle; font-weight: 100; letter-spacing: 1px; padding: 10px 20px;">' +
-              comment +
-            '</td>';
-        } else {
-          commetsviewhtml += '<td></td><td></td>'
-        }
-        commetsviewhtml += '</tr>';
-      }
-      commetsviewhtml +=
-            '</tbody>' +
-          '</table>' +
-        '</div>'; // comments-detail-view-container
-
-      $("#stars-detail-view").append(avgstartsviewhtml).append(startsviewhtml).append(commetsviewhtml);
-
+      var commentsviewhtml = createCommentsDetailViewTable(gtabledata);
+      // Add three tables
+      $("#stars-detail-view").append(avgstartsviewhtml).append(startsviewhtml).append(commentsviewhtml);
+      // Show detail views as popup dialog
       $("#stars-detail-view").lightbox_me({
         centered: true,
         preventScroll: true,
@@ -413,6 +310,126 @@
       fillstarshtml += '</ul>'
 
       return fillstarshtml;
+    }
+
+    function createAverageStarDetailViewTable(tabledata) {
+      var rating = tabledata.rating;
+      var avgstars = rating.avgstars;
+      var strAvgstars = Number.parseFloat(avgstars).toFixed(2);
+
+      // Set stars
+      var starts = new Array(5);
+      for (var i = 0; i < 5; i++) {
+        if (i < avgstars) {
+          starts[i] = '<li style="display: inline-block; padding: 0 0px; letter-spacing: 12px;"><a href="#" style="text-decoration: none; font-size: 24px; color: #fb9000eb"><i class="fa fa-star" aria-hidden="true"></i></a></li>';
+        } else {
+          starts[i] = '<li style="display: inline-block; padding: 0 0px; letter-spacing: 12px;"><a href="#" style="text-decoration: none; font-size: 24px; color: #fb9000eb"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>';
+        }
+      }
+
+      var avgstartsviewhtml = '<div class="avgstars-detail-view-container" style="background: #d1f4cb; padding: 20px 20px 0px 20px;">';
+      avgstartsviewhtml +=
+          '<table class="table-avgstars-detail-view" border="0" style="background: white; width: 400px; padding: 20px 20px 0px 20px;">' +
+            '<tbody>' +
+              '<tr>'+
+                '<td style="font-size: 22px;">'+
+                  "Table Ratings" +
+                '</td>'+
+              '</tr>'+
+              '<tr class="tr-avgstars-detail-view" style="height: 40px;">' +
+                '<td class="td-avgstars-detail-view" style="width:50%;">' +
+                  '<ul class="rating" style="display: block; text-align: left; padding: 0; margin: 1px 0 2px; vertical-align: middle; list-style: none">' +
+                      starts[0] +
+                      starts[1] +
+                      starts[2] +
+                      starts[3] +
+                      starts[4] +
+                  '</ul>' +
+                '</td>'+
+                '<td class="td-star-value" style="color: #090; font-size: 19px; text-align: -webkit-left; vertical-align: middle; font-weight: 100; letter-spacing: 1px;">' +
+                  strAvgstars + ' stars' +
+                '</td>' +
+              '</tr>';
+      avgstartsviewhtml +=
+            '<tr>' +
+              '<td style="font-size: 22px;">' +
+                strAvgstars + " out of 5 stars"
+              '</td>' +
+            '</tr>';
+           '</tbody>' +
+         '</table>' +
+       '</div>'; // avgstars-detail-view-container
+
+      return avgstartsviewhtml;
+    }
+
+    function createStarsDetailViewTable(tabledata) {
+      var rating = tabledata.rating;
+      var avgstars = rating.avgstars;
+      var startsviewhtml = '<div class="stars-detail-view-container" style="background: #d1f4cb; padding: 0px 20px 20px 20px;">';
+
+      startsviewhtml +=
+        '<table class="table-stars-detail-view" border="0" cellpadding="0" cellspacing="0" style="background: white; width: 400px; padding: 0px 20px 20px 20px;">' +
+          '<tbody>';
+       for (var i = 4; i >= 0; i --) {
+         startsviewhtml +=
+           '<tr>' +
+             '<td width="30%">' +
+               fillStars(i + 1) +
+             '</td>' +
+             '<td class="td-star-value" style="color: #090; font-size: 19px; text-align: -webkit-left; vertical-align: middle; font-weight: 100; letter-spacing: 1px; padding-left: 13px;">' +
+               (i == (avgstars - 1)  ? '1 ratings - 100%' : '0 ratings - 0%');
+             '</td>' +
+           '</tr>';
+       }
+      startsviewhtml +=
+           '</tbody>' +
+         '</table>' +
+       '</div>'; // stars-detail-view-container
+
+      return startsviewhtml;
+    }
+
+    function createCommentsDetailViewTable(tabledata) {
+      // Get comments
+      var comments = tabledata.comments
+      var commentkeys;
+      var numberofcomments;
+      if (comments === undefined) {
+        numberofcomments = 0;
+      } else {
+        commentkeys = Object.keys(comments);
+        numberofcomments = commentkeys.length;
+      }
+
+      // Create bottom. a table of comments detail view
+      var commentsviewhtml = '<div class="comments-detail-view-container" style="background: #d1f4cb;  padding: 0px 20px 20px 20px;">';
+      commentsviewhtml +=
+          '<table class="table-detail-view" border="0" cellpadding="0" cellspacing="0" style="background: white; width: 400px; padding: 20px;border-collapse: collapse;">' +
+            '<tbody>'
+      for (var i = 0; i < 5; i ++) {
+        commentsviewhtml += '<tr classs="tr-comments-detail-view" style="height: 70px; border-bottom: 1px solid #ececec;">'
+        if (i < numberofcomments) {
+          var comment = comments[commentkeys[i]]['comment'];
+          var commentrating = comments[commentkeys[i]]['rating'];
+          commentsviewhtml +=
+            '<td classs="td-comments-detail-stars-view" style="width: 30%; vertical-align: top; padding: 16px 0px 10px 20px;">' +
+              fillStars(commentrating) +
+            '</td>'+
+            '<td class="td-comments-detail-comment-view" style="color: #090; font-size: 19px; text-align: -webkit-left; vertical-align: middle; font-weight: 100; letter-spacing: 1px; padding: 10px 20px;">' +
+              comment +
+            '</td>';
+        } else {
+          commentsviewhtml += '<td></td><td></td>'
+        }
+        commentsviewhtml += '</tr>';
+      }
+      commentsviewhtml +=
+            '</tbody>' +
+          '</table>' +
+        '</div>'; // comments-detail-view-container
+
+      return commentsviewhtml;
     }
 
     lightbox.option({
