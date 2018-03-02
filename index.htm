@@ -45,6 +45,7 @@
 	</script>
     <script>
     var gtabledata = null;
+    var detailViewpopup = null;
     // Create the initial map
     function initMap() {
 		var initialloc = {lat: 39.211147, lng: -97.942848};
@@ -223,7 +224,7 @@
                         addAllImagesTag(tabledata) +
       								'</td>'+
       							'</tr>' +
-                    '<tr onclick="starsDetailView()">'+
+                    '<tr onclick="detailView()">'+
                       '<td>'+
                         '<ul class="rating" style="display: block; text-align: left; padding: 0; margin: 1px 0 2px; vertical-align: middle; list-style: none">' +
                             starts[0] +
@@ -237,7 +238,7 @@
                         strAvgstars + ' stars' +
                       '</td>' +
                     '</tr>'+
-                    '<tr onclick="starsDetailView()">' +
+                    '<tr onclick="detailView()">' +
                       '<td class="td-star-value" style="color: #090; font-size: 19px; text-align: -webkit-left; vertical-align: middle; font-weight: 100; letter-spacing: 1px;">' +
                         comments + ' comments' +
                       '</td>' +
@@ -276,17 +277,23 @@
       return imageviewhtml;
     }
 
-    function starsDetailView() {
+    function detailView() {
       // Create top. a table of average stars view
       var avgstartsviewhtml = createAverageStarDetailViewTable(gtabledata);
       // Create middle. a table of stars detail view
       var startsviewhtml = createStarsDetailViewTable(gtabledata);
       // Create bottom. a table of comments detail view
       var commentsviewhtml = createCommentsDetailViewTable(gtabledata);
+      // Create close button
+      var closebuttonhtml = createCloseButtonForDetailView();
       // Add three tables
-      $("#stars-detail-view").append(avgstartsviewhtml).append(startsviewhtml).append(commentsviewhtml);
+      $("#stars-detail-view")
+        .append(avgstartsviewhtml)
+        .append(startsviewhtml)
+        .append(commentsviewhtml)
+        .append(closebuttonhtml);
       // Show detail views as popup dialog
-      $("#stars-detail-view").lightbox_me({
+      detailViewPopup = $("#stars-detail-view").lightbox_me({
         centered: true,
         preventScroll: true,
         onLoad: function() {
@@ -430,6 +437,22 @@
         '</div>'; // comments-detail-view-container
 
       return commentsviewhtml;
+    }
+
+    function createCloseButtonForDetailView() {
+      var closebuttonhtml = '<div style="text-align: right;">';
+      closebuttonhtml += '<a href="#" class="close-detail-view" id="close-detail-view">';
+      closebuttonhtml += '<img src="images/close.png" onclick="closeDetailView()"></img>';
+      closebuttonhtml += '</a>';
+      closebuttonhtml += '</div>';
+
+      return closebuttonhtml;
+    }
+
+    function closeDetailView() {
+      if (detailViewPopup != null) {
+        detailViewPopup.trigger('close');
+      }
     }
 
     lightbox.option({
