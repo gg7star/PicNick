@@ -29,20 +29,20 @@
 
       /* Left and right column */
       .column.side {
-          width: 30%;
+          width: 10%;
       }
 
       /* Middle column */
       .column.middle {
-          width: 60%;
+          width: 80%;
       }
       /* Middle 3 columns */
       .column.middle.column3 {
-          width: 20%;
+          width: 25%;
       }
       /* Middle column */
       .column.middle.column4 {
-          width: 15%;
+          width: 40%;
       }
       /* Clear floats after the columns */
       .row:after {
@@ -52,29 +52,68 @@
       }
       .column.middle.column3 input {
         width: 100%;
+        font-size: 14px;
       }
       .column.middle.column3 select {
         width: 100%;
+        font-size: 14px;
       }
       .column.middle.column3 label {
         padding: 0px 13px;
       }
       .column.middle.column3 td {
         height: 26px;
+        font-size: 20px;
+        width: 27%;
+      }
+      .column.middle.column4 td {
+        height: 26px;
+        font-size: 20px;
+        width: 27%;
+      }
+      .column.middle.column4 .rating {
+        display: block;
+        padding: 0;
+        margin: 1px 0 2px;
+        vertical-align: middle;
+        list-style: none;
+        text-align: center;
+      }
+      .column.middle.column4 .td-comments-detail-comment-view {
+        color: #090;
+        font-size: 19px;
+        text-align: -webkit-left;
+        vertical-align: middle;
+        font-weight: 100;
+        letter-spacing: 1px;
+        padding: 0px;
+        width: 65%;
+      }
+      .column.middle.column4 .td-comments-detail-comment-view textarea {
+        width: 100%;
+        height: 100%;
+        resize: vertical;
+        font-size: 14px;
+        padding: 5px;
+      }
+      .table-comments-editor-select {
+        width: 100%;
+        height: 100%;
+        font-size: 14px;
       }
       /* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
-      @media (max-width: 1500px) {
+      @media (max-width: 1322px) {
           .column.side {
-              width: 20%;
+              width: 10%;
           }
           .column.middle {
             width: 80%;
           }
           .column.middle.column3 {
-              width: 30%;
+              width: 25%;
           }
           .column.middle.column4 {
-              width: 20%;
+              width: 40%;
           }
       }
       @media (max-width: 600px) {
@@ -194,6 +233,71 @@
         letter-spacing: 1px;
         padding: 10px 20px;
       }
+      .td-comments-editor-rating-title {
+        text-align: center;
+        width: 135px;
+      }
+      .td-comments-editor-comment-title {
+        text-align: center;
+        width: 300px;
+      }
+      .td-comments-detail-comment-delete {
+        text-align: center;
+      }
+      .setrating {
+        float:left;
+      }
+      /* :not(:checked) is a filter, so that browsers that don’t support :checked don’t
+         follow these rules. Every browser that supports :checked also supports :not(), so
+         it doesn’t make the test unnecessarily selective */
+      .setrating:not(:checked) > input {
+        position:absolute;
+        top:-9999px;
+        clip:rect(0,0,0,0);
+      }
+
+      .setrating:not(:checked) > label {
+        float: right;
+        padding: 0px;
+        overflow: hidden;
+        white-space: nowrap;
+        cursor: pointer;
+        font-size: 15px;
+        line-height: 1.2;
+        letter-spacing: 6px;
+        color:#ddd;
+        text-shadow:1px 1px #bbb, 2px 2px #666, .1em .1em .2em rgba(0,0,0,.5);
+      }
+
+      .setrating:not(:checked) > label:before {
+        content: '★ ';
+      }
+
+      .setrating > input:checked ~ label {
+        color: #f70;
+        text-shadow:1px 1px #c60, 2px 2px #940, .1em .1em .2em rgba(0,0,0,.5);
+      }
+
+      .setrating:not(:checked) > label:hover,
+      .setrating:not(:checked) > label:hover ~ label {
+        color: gold;
+        text-shadow:1px 1px goldenrod, 2px 2px #B57340, .1em .1em .2em rgba(0,0,0,.5);
+      }
+
+      .setrating > input:checked + label:hover,
+      .setrating > input:checked + label:hover ~ label,
+      .setrating > input:checked ~ label:hover,
+      .setrating > input:checked ~ label:hover ~ label,
+      .setrating > label:hover ~ input:checked ~ label {
+        color: #ea0;
+        text-shadow:1px 1px goldenrod, 2px 2px #B57340, .1em .1em .2em rgba(0,0,0,.5);
+      }
+
+      .setrating > label:active {
+        position:relative;
+        top:2px;
+        left:2px;
+      }
     </style>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
@@ -206,628 +310,391 @@
     <h3>PicNick Test Database Viewer</h3>
     <hr />
     <div id="keyDIV"></div>
-	<div id="map"></div>
-  <div class="row">
-    <div class="column side"></div>
-    <div id="table-general-info" class="column middle">
-      <div class="column middle column3">
-        <table border="10" align=center>
-          <tr>
-            <td><label>Lat</label></td>
-            <td><input type="text" size="10" maxlength="12" id="tablelat"></td>
-          </tr>
-          <tr>
-            <td><label>Long</label></td>
-            <td><input type="text" size="10" maxlength="12" id="tablelng"></td>
-          </tr>
-          <tr>
-            <td><label>Tables</label></td>
-            <td>
-              <select id="numtables" disabled>
-                <option value="1 table" id="1table">1 Table</option>
-                <option value="2 tables" id="2tables">2 Tables</option>
-                <option value="3 tables" id="3tables">3 Tables</option>
-                <option value="4 tables" id="4tables">4 Tables</option>
-                <option value="5+ tables" id="5+tables">5+ Tables</option>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label for="reservation">Reserve</label>
-            </td>
-            <td>
-              <input type="checkbox" id="reservation" disabled="disabled">
-            </td>
-          </tr>
-          <tr>
-            <td><label>Verified</label></td>
-            <td><input type="checkbox" id="verified"></td>
-          </tr>
-          <tr>
-            <td><label>Covered</label></td>
-            <td><input type="checkbox" id="covered"></td>
-          </tr>
-          <tr>
-            <td><label>Water</label></td>
-            <td><input type="checkbox" id="water"></td>
-          </tr>
-          <tr>
-            <td><label>Restrooms</label></td>
-            <td><input type="checkbox" id="restrooms"></td>
-          </tr>
-          <tr>
-            <td><label>WiFi</label></td>
-            <td><input type="checkbox" id="wifi"></td>
-          </tr>
-          <tr>
-            <td><label>Handicap</label></td>
-            <td><input type="checkbox" id="handicap"></td>
-          </tr>
-          <tr>
-            <td><label>Pet</label></td>
-            <td><input type="checkbox" id="pet"></td>
-          </tr>
-          <tr>
-            <td><label>RV</label></td>
-            <td><input type="checkbox" id="rv"></td>
-          </tr>
-          <tr>
-            <td><label>Vending</label></td>
-            <td><input type="checkbox" id="vending"></td>
-          </tr>
-          <tr>
-            <td>
-              <label> Ratings</label>
-            </td>
-            <td>
-              <select id="tablerating" disabled>
-                <option value="0" id="0stars">0</option>
-                <option value="1" id="1stars">1</option>
-                <option value="2" id="2stars">2</option>
-                <option value="3" id="3stars">3</option>
-                <option value="4" id="4stars">4</option>
-                <option value="5" id="5stars">5</option>
-              </select>
-            </td>
-          </tr>
-        </table>
-        <div class="button-group" style="text-align: center; padding: 20px;">
-          <button type="button" disabled="disabled" id="update"><b>Update</b></button>
-          <button type="button" disabled="disabled" id="delete"><b>Delete</b></button>
+  	<div id="map"></div>
+    <div class="row">
+      <div class="column side"></div>
+
+      <div id="info-editor-layout" class="column middle">
+        <div class="column middle column3" id="general-info-editor-layout">
+          <table border="10" align=center>
+            <tbody>
+              <tr>
+                <td><label>Lat</label></td>
+                <td><input type="text" size="10" maxlength="12" id="tablelat"></td>
+              </tr>
+              <tr>
+                <td><label>Long</label></td>
+                <td><input type="text" size="10" maxlength="20" style="53%" id="tablelng"></td>
+              </tr>
+              <tr>
+                <td><label>Tables</label></td>
+                <td>
+                  <select id="numtables" disabled>
+                    <option value="1 table" id="1table">1 Table</option>
+                    <option value="2 tables" id="2tables">2 Tables</option>
+                    <option value="3 tables" id="3tables">3 Tables</option>
+                    <option value="4 tables" id="4tables">4 Tables</option>
+                    <option value="5+ tables" id="5+tables">5+ Tables</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <label for="reservation">Reserve</label>
+                </td>
+                <td>
+                  <input type="checkbox" id="reservation" disabled="disabled">
+                </td>
+              </tr>
+              <tr>
+                <td><label>Verified</label></td>
+                <td><input type="checkbox" id="verified"></td>
+              </tr>
+              <tr>
+                <td><label>Covered</label></td>
+                <td><input type="checkbox" id="covered"></td>
+              </tr>
+              <tr>
+                <td><label>Water</label></td>
+                <td><input type="checkbox" id="water"></td>
+              </tr>
+              <tr>
+                <td><label>Restrooms</label></td>
+                <td><input type="checkbox" id="restrooms"></td>
+              </tr>
+              <tr>
+                <td><label>WiFi</label></td>
+                <td><input type="checkbox" id="wifi"></td>
+              </tr>
+              <tr>
+                <td><label>Handicap</label></td>
+                <td><input type="checkbox" id="handicap"></td>
+              </tr>
+              <tr>
+                <td><label>Pet</label></td>
+                <td><input type="checkbox" id="pet"></td>
+              </tr>
+              <tr>
+                <td><label>RV</label></td>
+                <td><input type="checkbox" id="rv"></td>
+              </tr>
+              <tr>
+                <td><label>Vending</label></td>
+                <td><input type="checkbox" id="vending"></td>
+              </tr>
+              <tr>
+              <td>
+                <label> Ratings</label>
+              </td>
+              <td>
+                <select id="tablerating" disabled>
+                  <option value="0" id="0stars">0</option>
+                  <option value="1" id="1stars">1</option>
+                  <option value="2" id="2stars">2</option>
+                  <option value="3" id="3stars">3</option>
+                  <option value="4" id="4stars">4</option>
+                  <option value="5" id="5stars">5</option>
+                </select>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+          <div class="button-group" style="text-align: center; padding: 20px;">
+            <button type="button" disabled="disabled" id="update"><b>Update</b></button>
+            <button type="button" disabled="disabled" id="delete"><b>Delete</b></button>
+          </div>
+        </div>
+        <div class="column middle column4" id="comments-info-editor-layout">
+          <table border=10 align="center">
+            <tbody>
+              <tr>
+                <td class="td-comments-editor-rating-title"><label>Rating</label></td>
+                <td class="td-comments-editor-comment-title"><label>Comment</label></td>
+                <td> </td>
+              </tr>
+              <tr><td> </td><td> </td><td> </td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="column middle column3" id="images-info-editor-layout">
+          <table border=10 align="center">
+            <tbody>
+              <tr>
+                <td class="td-comments-editor-rating-title"><label>Images</label></td>
+                <td></td>
+              </tr>
+              <tr><td></td><td></td></tr>
+            </tbody>
+          </table>
         </div>
       </div>
-      <div class="column middle column3">
-        <table border=10 align="center">
-          <tr>
-            <td style="text-align: center; width: 135px;"><label>Rating</label></td>
-            <td style="text-align: center; width: 300px;"><label>Comment</label></td>
-          </tr>
-          <tr><td> </td><td> </td></tr>
-        </table>
-      </div>
-      <div class="column middle column3"></div>
-    </div>
-    <div class="column side">
-    </div>
-  </div> <!-- row -->
 
-  <div id="images-detail-view"></div>
-  <div id="stars-detail-view"></div>
-  <div id="comments-detail-view"></div>
-  <script src="js/lightbox.js"></script>
-  <script src="js/jquery.lightbox_me.js"></script>
-	<script src="https://www.gstatic.com/firebasejs/4.1.2/firebase.js"></script>
-	<script>
-  	// Initialize Firebase
-  	var config = {
-    	apiKey: "AIzaSyB7qx71V9N8PfDtWkBkzv2DEi_j8GaqQg4",
-    	authDomain: "picnick-test-database.firebaseapp.com",
-    	databaseURL: "https://picnick-test-database.firebaseio.com",
-    	projectId: "picnick-test-database",
-    	storageBucket: "picnick-test-database.appspot.com",
-    	messagingSenderId: "233513971727"
- 		};
-  	firebase.initializeApp(config);
-	</script>
-  <script>
-    var gtabledata = null;
-    var detailViewpopup = null;
-    // Create the initial map
-    function initMap() {
-  		var initialloc = {lat: 39.211147, lng: -97.942848};
-  		var unverifiedicon = 'images/unverifiedtable_1.png'
-  		var verifiedicon = 'images/verifiedtable_1.png'
-    	var map = new google.maps.Map(document.getElementById('map'), {
-              		center: initialloc,
-              		zoom: 5
-            		});
-      // add a single infoWindow outside of the loop that creates the markers
+      <div class="column side"></div>
+    </div> <!-- row -->
 
-    	var infoWindow = createGoogleMapInfoEditor();
-  		//loop through the database and add a marker to the map for each table location
-  		//assign the database UID that was created by the push method as the marker ID
-    	var ref = firebase.database().ref();
-    	ref.on("child_added", function(snapshot) {
-        var key = snapshot.key;
-				var data = snapshot.val();
-				var lat = data.latitude;
-				var lng = data.longitude;
-				console.log('child added');
-				var vfd = String(data.verified);
-				if(vfd == "false") {
-					tableicon = unverifiedicon;
-				} else {
-					tableicon = verifiedicon;
-				}
-				var position = new google.maps.LatLng(lat,lng);
-				var marker = new google.maps.Marker({
-                        		position: position,
-                        		map: map,
-                        		id: key,
-                        		icon: tableicon
-                    		});
-				//Add a listener to detect user "clicks" on a marker
-				marker.addListener('click', function() {
-          var tableref = firebase.database().ref().child(marker.id)
-					console.log('tableref:',tableref);
-					console.log('marker ID:', marker.id)
-    			tableref.once("value")
-    				.then(function(snapshot) {
-    				  var tabledata = snapshot.val();
-              console.log("=== tabledata: ", tabledata);
-              var tablenumimages = snapshot.child("images").numChildren();
-  						console.log('=== tablenumimages:', tablenumimages);
-  						var tableimage1link;
-  						var tableimagesref = tableref.child("images");
-  						console.log('=== tableimagesref:', tableimagesref);
-  						var tableimagewidth;
-  						var tableimageheight;
-  						var tableimageclass;
-  						var tableimagekey;
+    <div id="images-detail-view"></div>
+    <div id="stars-detail-view"></div>
+    <div id="comments-detail-view"></div>
+    <script src="js/lightbox.js"></script>
+    <script src="js/jquery.lightbox_me.js"></script>
+  	<script src="https://www.gstatic.com/firebasejs/4.1.2/firebase.js"></script>
+  	<script>
+    	// Initialize Firebase
+    	var config = {
+      	apiKey: "AIzaSyB7qx71V9N8PfDtWkBkzv2DEi_j8GaqQg4",
+      	authDomain: "picnick-test-database.firebaseapp.com",
+      	databaseURL: "https://picnick-test-database.firebaseio.com",
+      	projectId: "picnick-test-database",
+      	storageBucket: "picnick-test-database.appspot.com",
+      	messagingSenderId: "233513971727"
+   		};
+    	firebase.initializeApp(config);
+  	</script>
+    <script>
+      var gtabledata = null;
+      var detailViewpopup = null;
+      // Create the initial map
+      function initMap() {
+    		var initialloc = {lat: 39.211147, lng: -97.942848};
+    		var unverifiedicon = 'images/unverifiedtable_1.png'
+    		var verifiedicon = 'images/verifiedtable_1.png'
+      	var map = new google.maps.Map(document.getElementById('map'), {
+                		center: initialloc,
+                		zoom: 5
+              		});
+        // add a single infoWindow outside of the loop that creates the markers
+      	var infoWindow = createGoogleMapInfoEditor();
+    		//loop through the database and add a marker to the map for each table location
+    		//assign the database UID that was created by the push method as the marker ID
+      	var ref = firebase.database().ref();
+      	ref.on("child_added", function(snapshot) {
+          var key = snapshot.key;
+  				var data = snapshot.val();
+  				var lat = data.latitude;
+  				var lng = data.longitude;
+  				console.log('child added');
+  				var vfd = String(data.verified);
+  				if(vfd == "false") {
+  					tableicon = unverifiedicon;
+  				} else {
+  					tableicon = verifiedicon;
+  				}
+  				var position = new google.maps.LatLng(lat,lng);
+  				var marker = new google.maps.Marker({
+                          		position: position,
+                          		map: map,
+                          		id: key,
+                          		icon: tableicon
+                      		});
+  				//Add a listener to detect user "clicks" on a marker
+  				marker.addListener('click', function() {
+            var tableref = firebase.database().ref().child(marker.id)
+  					console.log('tableref:',tableref);
+  					console.log('marker ID:', marker.id)
+      			tableref.once("value")
+      				.then(function(snapshot) {
+      				  var tabledata = snapshot.val();
+                console.log("=== tabledata: ", tabledata);
+                var tablenumimages = snapshot.child("images").numChildren();
+    						console.log('=== tablenumimages:', tablenumimages);
+    						var tableimage1link;
+    						var tableimagesref = tableref.child("images");
+    						console.log('=== tableimagesref:', tableimagesref);
+    						var tableimagewidth;
+    						var tableimageheight;
+    						var tableimageclass;
+    						var tableimagekey;
 
-              infoWindow.setContent(marker.id);
-              infoWindow.open(map, marker);
+                infoWindow.setContent(marker.id);
+                infoWindow.open(map, marker);
 
-              // Set googlemap info into editor
-              setGoogleMapInfoEditor(tabledata);
+                // Set googlemap info into editor
+                setGoogleMapInfoIntoEditor(tabledata);
 
-						  tableimagesref.once("child_added", function(snapshot) {
-							  tableimagekey = snapshot.key;
-							  tableimage1link = snapshot.val();
-							  console.log('tableimagekey:',tableimagekey,'tableimage1link:', tableimage1link);
-							  tableimageclass = ' class=""';
-						  });
+  						  tableimagesref.once("child_added", function(snapshot) {
+  							  tableimagekey = snapshot.key;
+  							  tableimage1link = snapshot.val();
+  							  console.log('tableimagekey:',tableimagekey,'tableimage1link:', tableimage1link);
+  							  tableimageclass = ' class=""';
+  						  });
 
-              var infoWindowcontent = createInfoWindowContent(tabledata);
-              infoWindow.setContent(infoWindowcontent);
-          		infoWindow.open(map, marker);
-      			}); // end promise function of tableref
+                var infoWindowcontent = createInfoWindowContent(tabledata);
+                infoWindow.setContent(infoWindowcontent);
+            		infoWindow.open(map, marker);
+        			}); // end promise function of tableref
 
-          // Set events of google map editor
-          setUpdateEventOfEditor(marker, tableref);
-          setDeleteEventOfEditor(marker, tableref);
-    		}); // end of marker click function
+            // Set events of google map editor
+            setUpdateEventOfEditor(marker, tableref);
+            setDeleteEventOfEditor(marker, tableref);
+      		}); // end of marker click function
 
-      	//Add a listener to close the infoWindow if a user clicks on the map
-  			google.maps.event.addListener(map,'click', function() {
-    			infoWindow.close();
-          initializeGoogleMapInfoEditor();
-    		});
+        	//Add a listener to close the infoWindow if a user clicks on the map
+    			google.maps.event.addListener(map,'click', function() {
+      			infoWindow.close();
+            initializeGoogleMapInfoEditor();
+      		});
 
-        //Add alistener to detect user closing the infowindow
-        google.maps.event.addListener(infoWindow, 'closeclick', function() {
-          initializeGoogleMapInfoEditor();
-        });
-		  }); // end of chiled_added event of firebase.database().ref()
-    }; // end of initMap()
+          //Add alistener to detect user closing the infowindow
+          google.maps.event.addListener(infoWindow, 'closeclick', function() {
+            initializeGoogleMapInfoEditor();
+          });
+  		  }); // end of chiled_added event of firebase.database().ref()
+      }; // end of initMap()
 
-    function initializeGoogleMapInfoEditor() {
-      //initialize buttons & input values
-      document.getElementById("tablelat").value = "";
-      document.getElementById("tablelng").value = "";
-      //document.getElementById("multiple").disabled = true;
-      //document.getElementById("multiple").checked = false;
-      document.getElementById("numtables").disabled = true;
-      document.getElementById("numtables").value = 'default';
-      document.getElementById("reservation").disabled = true;
-      document.getElementById("reservation").checked = false;
-      document.getElementById("verified").checked = false;
-      document.getElementById("covered").checked = false;
-      document.getElementById("water").checked = false;
-      document.getElementById("restrooms").checked = false;
-      document.getElementById("wifi").checked = false;
-      document.getElementById("handicap").checked = false;
-      document.getElementById("pet").checked = false;
-      document.getElementById("rv").checked = false;
-      document.getElementById("vending").checked = false;
-      document.getElementById("update").disabled = true;
-      document.getElementById("update").style.backgroundColor = '#FFF';
-      document.getElementById("delete").disabled = true;
-      document.getElementById("delete").style.backgroundColor = '#FFF';
-      document.getElementById("tablerating").disabled = true;
-      document.getElementById("tablerating").value = 'default';
-    }
-
-    function createGoogleMapInfoEditor() {
-      // Initialize
-      initializeGoogleMapInfoEditor();
-      // add a single infoWindow outside of the loop that creates the markers
-      var infoWindow = new google.maps.InfoWindow();
-      return infoWindow;
-    }
-
-    function createInfoWindowContent(tabledata) {
-      var tablenumtables = String(tabledata.numberOfTables);
-      var tablereservation = String(tabledata.reserve);
-      var tableverified = String(tabledata.verified);
-      var tablecovered = String(tabledata.covered);
-      var tablewater = String(tabledata.water);
-      var tablerestrooms = String(tabledata.restroom);
-      var tablewifi = String(tabledata.wifi);
-      var tablehandicap = String(tabledata.handicap);
-      var tablepet = String(tabledata.pet);
-      var tablerv = String(tabledata.rv);
-      var tablevending = String(tabledata.vending);
-
-      if(tableverified == "true") {
-        verified = "**Verified**";
-      } else {
-        verified = "";
-      }
-
-      if(tablecovered == "true") {
-        if(tablenumtables != 1) {
-          covered = "Covered Tables<br>";
-        } else {
-          covered = "Covered Table<br>";
-        }
-      } else {
-        covered = "<nobr></nobr>";
-      }
-
-      if(tablewater == "true") {
-        water = "Water<br>";
-      } else {
-        water = "<nobr></nobr>";
-      }
-
-      if(tablerestrooms == "true") {
-        restrooms = "Restrooms<br>";
-      } else {
-        restrooms = "<nobr></nobr>";
-      }
-
-      if(tablewifi == "true") {
-        wifi = "WiFi<br>";
-      } else {
-        wifi = "<nobr></nobr>";
-      }
-
-      if(tablehandicap == "true") {
-        handicap = "Handicap Facilities<br>";
-      } else {
-        handicap = "<nobr></nobr>";
-      }
-
-      if(tablepet == "true") {
-        pet = "Pet Area<br>";
-      } else {
-        pet = "<nobr></nobr>";
-      }
-
-      if(tablerv == "true") {
-        rv = "RV Area<br>";
-      } else {
-        rv = "<nobr></nobr>";
-      }
-
-      if(tablevending == "true") {
-        vending = "Vending Machines<br>";
-      } else {
-        vending = "<nobr></nobr>";
-      }
-      // Get stars
-      gtabledata = tabledata;
-      var rating = tabledata.rating;
-      var avgstars = rating.avgstars;
-      var strAvgstars = Number.parseFloat(avgstars).toFixed(2);
-      // Set stars
-      var starts = new Array(5);
-      for (var i = 0; i < 5; i++) {
-        if (i < avgstars) {
-          starts[i] = '<li class="rating-li"><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>'
-        } else {
-          starts[i] = '<li class="rating-li"><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>'
-        }
-      }
-      // Get comments
-      var comments = tabledata.comments
-      if (comments === undefined) {
-        comments = 0;
-      } else {
-        comments = Object.keys(comments).length;
-      }
-
-      //create template for infoWindow content
-      var infoWindowcontent =
-        '<div id="content">'+
-          '<table border="0" cellspacing="10" width="330" height="210">'+
-            '<tr>'+
-              '<td align="center" height="10" style="color:#090; letter-spacing: 2px;font-family: Arial; font-size: 23px;"><b>' + verified + '</b></td>' +
-              '<td width="118" rowspan="2" align="left" valign="middle" height="200" style="font-size: 19px; font-weight: 100;letter-spacing: 1px;"' +
-                'id="ammenities">'+
-              // multiple+
-                  tablenumtables+"<br>"+
-                  covered+
-                  water+
-                  restrooms+
-                  wifi+
-                  handicap+
-                  pet+
-                  rv+
-                  vending+
-              '</td>'+
-            '</tr>'+
-            '<tr>'+
-              '<td width="188" align="center">' +
-                addAllImagesTag(tabledata) +
-              '</td>'+
-            '</tr>' +
-            '<tr onclick="detailView()">'+
-              '<td>'+
-                '<ul class="rating">' +
-                    starts[0] +
-                    starts[1] +
-                    starts[2] +
-                    starts[3] +
-                    starts[4] +
-                '</ul>' +
-              '</td>'+
-              '<td class="td-star-value">' +
-                strAvgstars + ' stars' +
-              '</td>' +
-            '</tr>'+
-            '<tr onclick="detailView()">' +
-              '<td class="td-star-value">' +
-                comments + ' comments' +
-              '</td>' +
-            '</tr>' +
-          '</table>'+
-        '</div>';
-        return infoWindowcontent;
-    }
-
-    function setGoogleMapInfoEditor(tabledata) {
-      setGeneralInfo(tabledata);
-      // var commentseditorhtml = createCommentsUpdateTable(tabledata);
-      // $("#tableinfo").append(commentseditorhtml);
-      // var commentseditorhtml = createCommentsUpdateTable(tabledata);
-      // $("#tableinfo").append(commentseditorhtml);
-    }
-
-    function setGeneralInfo(tabledata) {
-      var tablelat = tabledata.latitude;
-      var tablelng = tabledata.longitude;
-      var tablenumtables = String(tabledata.numberOfTables);
-      var tablereservation = String(tabledata.reserve);
-      var tableverified = String(tabledata.verified);
-      var tablecovered = String(tabledata.covered);
-      var tablewater = String(tabledata.water);
-      var tablerestrooms = String(tabledata.restroom);
-      var tablewifi = String(tabledata.wifi);
-      var tablehandicap = String(tabledata.handicap);
-      var tablepet = String(tabledata.pet);
-      var tablerv = String(tabledata.rv);
-      var tablevending = String(tabledata.vending);
-      var tablerating = tabledata.rating;
-      var tableavgstars = String(tablerating.avgstars);
-
-      document.getElementById("tablelat").value = tablelat;
-      document.getElementById("tablelng").value = tablelng;
-      document.getElementById("update").disabled = false;
-      document.getElementById("update").style.backgroundColor = '#0F0';
-      document.getElementById("delete").disabled = false;
-      document.getElementById("delete").style.backgroundColor = '#F00';
-      document.getElementById("numtables").disabled = false;
-      document.getElementById(tablenumtables.replace(/ /g,'')).selected = "true";
-      document.getElementById("reservation").disabled = false;
-      document.getElementById("reservation").checked = (tablereservation === 'true');
-      document.getElementById("tablerating").disabled = false;
-      document.getElementById(tableavgstars.replace(/ /g,'') + 'stars').selected = "true";
-      if(tableverified == "true") {
-        document.getElementById("verified").checked = true;
-      } else {
+      function initializeGoogleMapInfoEditor() {
+        //initialize buttons & input values
+        document.getElementById("tablelat").value = "";
+        document.getElementById("tablelng").value = "";
+        //document.getElementById("multiple").disabled = true;
+        //document.getElementById("multiple").checked = false;
+        document.getElementById("numtables").disabled = true;
+        document.getElementById("numtables").value = 'default';
+        document.getElementById("reservation").disabled = true;
+        document.getElementById("reservation").checked = false;
         document.getElementById("verified").checked = false;
-      }
-      if(tablecovered == "true") {
-        document.getElementById("covered").checked = true;
-      } else {
         document.getElementById("covered").checked = false;
-      }
-      if(tablewater == "true") {
-        document.getElementById("water").checked = true;
-      } else {
         document.getElementById("water").checked = false;
-      }
-      if(tablerestrooms == "true") {
-        document.getElementById("restrooms").checked = true;
-      } else {
         document.getElementById("restrooms").checked = false;
-      }
-      if(tablewifi == "true") {
-        document.getElementById("wifi").checked = true;
-      } else {
         document.getElementById("wifi").checked = false;
-      }
-      if(tablehandicap == "true") {
-        document.getElementById("handicap").checked = true;
-      } else {
         document.getElementById("handicap").checked = false;
-      }
-      if(tablepet == "true") {
-        document.getElementById("pet").checked = true;
-      } else {
         document.getElementById("pet").checked = false;
-      }
-      if(tablerv == "true") {
-        document.getElementById("rv").checked = true;
-      } else {
         document.getElementById("rv").checked = false;
-      }
-      if(tablevending == "true") {
-        document.getElementById("vending").checked = true;
-      } else {
         document.getElementById("vending").checked = false;
-      }
-    }
-
-    function setUpdateEventOfEditor(marker, tableref) {
-      document.getElementById('update').onclick = function() {
-        // Read inputs from HTML elements and update database
-        var tablelat = document.getElementById("tablelat").value;
-        var tablelng = document.getElementById("tablelng").value;
-        var tablenumtables = document.getElementById("numtables").value;
-        var tablereservation = document.getElementById("reservation").checked;
-        var tableverified = document.getElementById("verified").checked;
-        var tablecovered = document.getElementById("covered").checked;
-        var tablewater = document.getElementById("water").checked;
-        var tablerestrooms = document.getElementById("restrooms").checked;
-        var tablewifi = document.getElementById("wifi").checked;
-        var tablehandicap = document.getElementById("handicap").checked;
-        var tablepet = document.getElementById("pet").checked;
-        var tablerv = document.getElementById("rv").checked;
-        var tablevending = document.getElementById("vending").checked;
-        var tableavgstars = Number.parseInt(document.getElementById("tablerating").value);
-        var tablerating = {};
-        for(var i = 1; i < 6; i ++) {
-          tablerating[i + 'stars'] = (i == tableavgstars ? 1: 0);
-        }
-        tablerating['avgstars'] = tableavgstars;
-        console.log(tablelat,tablelng,tablenumtables,tablereservation,tableverified,
-						tablecovered,tablewater,tablerestrooms,tablewifi,tablehandicap,tablepet,tablerv,
-						tablevending, tableavgstars, tablerating);
-        // Check validation
-        var updatedata = {
-          // latitude: parseFloat(tablelat),
-          // longitude: parseFloat(tablelng),
-          numberOfTables: tablenumtables,
-          reserve: tablereservation,
-          verified: tableverified,
-          covered: tablecovered,
-          water: tablewater,
-          restroom: tablerestrooms,
-          wifi: tablewifi,
-          handicap: tablehandicap,
-          pet: tablepet,
-          rv: tablerv,
-          vending: tablevending,
-          rating: tablerating
-        };
-        // Update every data
-        tableref.update(updatedata);
-      };
-    }
-
-    function setDeleteEventOfEditor(marker, tableref) {
-      document.getElementById('delete').onclick = function() {
-        // remove marker from map
-        marker.setMap(null);
-        // delete current database record
-        tableref.remove();
-      };
-    }
-
-    function addAllImagesTag(tabledata) {
-      var images = tabledata.images;
-      var imagekeys;
-      var numberofimages;
-      if (images === undefined) {
-        numberofimages = 0;
-      } else {
-        imagekeys = Object.keys(images);
-        numberofimages = imagekeys.length;
+        document.getElementById("update").disabled = true;
+        document.getElementById("update").style.backgroundColor = '#FFF';
+        document.getElementById("delete").disabled = true;
+        document.getElementById("delete").style.backgroundColor = '#FFF';
+        document.getElementById("tablerating").disabled = true;
+        document.getElementById("tablerating").value = 'default';
       }
 
-      var imageviewhtml = '';
-      for (var i = 0; i < numberofimages; i++) {
-        imageviewhtml += '<a href="' + images[imagekeys[i]] + '" data-lightbox="roadtrip">' +
-          '<img id="gm-style-image" style="image-orientation: from-image" width="100%" src="' +
-            images[imagekeys[i]] + '"' + (i > 0 ? ' hidden' : '') + '></a>';
+      function createGoogleMapInfoEditor() {
+        // Initialize
+        initializeGoogleMapInfoEditor();
+        // add a single infoWindow outside of the loop that creates the markers
+        var infoWindow = new google.maps.InfoWindow();
+        return infoWindow;
       }
 
-      return imageviewhtml;
-    }
+      function createInfoWindowContent(tabledata) {
+        var tablenumtables = String(tabledata.numberOfTables);
+        var tablereservation = String(tabledata.reserve);
+        var tableverified = String(tabledata.verified);
+        var tablecovered = String(tabledata.covered);
+        var tablewater = String(tabledata.water);
+        var tablerestrooms = String(tabledata.restroom);
+        var tablewifi = String(tabledata.wifi);
+        var tablehandicap = String(tabledata.handicap);
+        var tablepet = String(tabledata.pet);
+        var tablerv = String(tabledata.rv);
+        var tablevending = String(tabledata.vending);
 
-    function detailView() {
-      // Create top. a table of average stars view
-      var avgstartsviewhtml = createAverageStarDetailViewTable(gtabledata);
-      // Create middle. a table of stars detail view
-      var startsviewhtml = createStarsDetailViewTable(gtabledata);
-      // Create bottom. a table of comments detail view
-      var commentsviewhtml = createCommentsDetailViewTable(gtabledata);
-      // Create close button
-      var closebuttonhtml = createCloseButtonForDetailView();
-      // Add three tables
-      $("#stars-detail-view")
-        .append(closebuttonhtml)
-        .append(avgstartsviewhtml)
-        .append(startsviewhtml)
-        .append(commentsviewhtml);
-      // Show detail views as popup dialog
-      detailViewPopup = $("#stars-detail-view").lightbox_me({
-        centered: true,
-        preventScroll: true,
-        overlayCSS:	{background: 'black', opacity: .8},
-        onLoad: function() {
-          $("#stars-detail-view").find("input:first").focus();
-        },
-        onClose: function() {
-          $("#stars-detail-view").empty();
-        }
-      });
-    }
-
-    function fillStars(count) {
-      var fillstarshtml = '<ul class="rating">';
-      for (var i = 0; i < 5; i ++) {
-        if (i < count) {
-          fillstarshtml += '<li class="rating-small-li"><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>';
+        if(tableverified == "true") {
+          verified = "**Verified**";
         } else {
-          fillstarshtml +=  '<li class="rating-small-li"><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>';
+          verified = "";
         }
-      }
-      fillstarshtml += '</ul>'
 
-      return fillstarshtml;
-    }
-
-    function createAverageStarDetailViewTable(tabledata) {
-      var rating = tabledata.rating;
-      var avgstars = rating.avgstars;
-      var strAvgstars = Number.parseFloat(avgstars).toFixed(2);
-
-      // Set stars
-      var starts = new Array(5);
-      for (var i = 0; i < 5; i++) {
-        if (i < avgstars) {
-          starts[i] = '<li class="rating-li"><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>';
+        if(tablecovered == "true") {
+          if(tablenumtables != 1) {
+            covered = "Covered Tables<br>";
+          } else {
+            covered = "Covered Table<br>";
+          }
         } else {
-          starts[i] = '<li class="rating-li"><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>';
+          covered = "<nobr></nobr>";
         }
-      }
 
-      var avgstartsviewhtml = '<div class="avgstars-detail-view-container">';
-      avgstartsviewhtml +=
-          '<table class="table-avgstars-detail-view" border="0">' +
-            '<tbody>' +
+        if(tablewater == "true") {
+          water = "Water<br>";
+        } else {
+          water = "<nobr></nobr>";
+        }
+
+        if(tablerestrooms == "true") {
+          restrooms = "Restrooms<br>";
+        } else {
+          restrooms = "<nobr></nobr>";
+        }
+
+        if(tablewifi == "true") {
+          wifi = "WiFi<br>";
+        } else {
+          wifi = "<nobr></nobr>";
+        }
+
+        if(tablehandicap == "true") {
+          handicap = "Handicap Facilities<br>";
+        } else {
+          handicap = "<nobr></nobr>";
+        }
+
+        if(tablepet == "true") {
+          pet = "Pet Area<br>";
+        } else {
+          pet = "<nobr></nobr>";
+        }
+
+        if(tablerv == "true") {
+          rv = "RV Area<br>";
+        } else {
+          rv = "<nobr></nobr>";
+        }
+
+        if(tablevending == "true") {
+          vending = "Vending Machines<br>";
+        } else {
+          vending = "<nobr></nobr>";
+        }
+        // Get stars
+        gtabledata = tabledata;
+        var rating = tabledata.rating;
+        var avgstars = rating.avgstars;
+        var strAvgstars = Number.parseFloat(avgstars).toFixed(2);
+        // Set stars
+        var starts = new Array(5);
+        for (var i = 0; i < 5; i++) {
+          if (i < avgstars) {
+            starts[i] = '<li class="rating-li"><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>'
+          } else {
+            starts[i] = '<li class="rating-li"><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>'
+          }
+        }
+        // Get comments
+        var comments = tabledata.comments
+        if (comments === undefined) {
+          comments = 0;
+        } else {
+          comments = Object.keys(comments).length;
+        }
+
+        //create template for infoWindow content
+        var infoWindowcontent =
+          '<div id="content">'+
+            '<table border="0" cellspacing="10" width="330" height="210">'+
               '<tr>'+
-                '<td class="table-avgstars-detail-view-td-title">'+
-                  "Table Ratings" +
+                '<td align="center" height="10" style="color:#090; letter-spacing: 2px;font-family: Arial; font-size: 23px;"><b>' + verified + '</b></td>' +
+                '<td width="118" rowspan="2" align="left" valign="middle" height="200" style="font-size: 19px; font-weight: 100;letter-spacing: 1px;"' +
+                  'id="ammenities">'+
+                // multiple+
+                    tablenumtables+"<br>"+
+                    covered+
+                    water+
+                    restrooms+
+                    wifi+
+                    handicap+
+                    pet+
+                    rv+
+                    vending+
                 '</td>'+
               '</tr>'+
-              '<tr class="tr-avgstars-detail-view">' +
-                '<td class="td-avgstars-detail-view">' +
+              '<tr>'+
+                '<td width="188" align="center">' +
+                  addAllImagesTag(tabledata) +
+                '</td>'+
+              '</tr>' +
+              '<tr onclick="detailView()">'+
+                '<td>'+
                   '<ul class="rating">' +
                       starts[0] +
                       starts[1] +
@@ -839,156 +706,475 @@
                 '<td class="td-star-value">' +
                   strAvgstars + ' stars' +
                 '</td>' +
-              '</tr>';
-      avgstartsviewhtml +=
-            '<tr>' +
-              '<td class="table-avgstars-detail-view-td-title">' +
-                strAvgstars + " out of 5 stars"
-              '</td>' +
-            '</tr>';
-           '</tbody>' +
-         '</table>' +
-       '</div>'; // avgstars-detail-view-container
-
-      return avgstartsviewhtml;
-    }
-
-    function createStarsDetailViewTable(tabledata) {
-      var rating = tabledata.rating;
-      var avgstars = rating.avgstars;
-      var startsviewhtml = '<div class="stars-detail-view-container">';
-
-      startsviewhtml +=
-        '<table class="table-stars-detail-view" border="0" cellpadding="0" cellspacing="0">' +
-          '<tbody>';
-       for (var i = 4; i >= 0; i --) {
-         startsviewhtml +=
-           '<tr>' +
-             '<td width="30%">' +
-               fillStars(i + 1) +
-             '</td>' +
-             '<td class="td-star-value" style="color: #090; font-size: 19px; text-align: -webkit-left; vertical-align: middle; font-weight: 100; letter-spacing: 1px; padding-left: 13px;">' +
-               (i == (avgstars - 1)  ? '1 ratings - 100%' : '0 ratings - 0%');
-             '</td>' +
-           '</tr>';
-       }
-      startsviewhtml +=
-           '</tbody>' +
-         '</table>' +
-       '</div>'; // stars-detail-view-container
-
-      return startsviewhtml;
-    }
-
-    function createCommentsDetailViewTable(tabledata) {
-      // Get comments
-      var comments = tabledata.comments
-      var commentkeys;
-      var numberofcomments;
-      if (comments === undefined) {
-        numberofcomments = 0;
-      } else {
-        commentkeys = Object.keys(comments);
-        numberofcomments = commentkeys.length;
+              '</tr>'+
+              '<tr onclick="detailView()">' +
+                '<td class="td-star-value">' +
+                  comments + ' comments' +
+                '</td>' +
+              '</tr>' +
+            '</table>'+
+          '</div>';
+          return infoWindowcontent;
       }
 
-      // Create bottom. a table of comments detail view
-      var commentsviewhtml = '<div class="comments-detail-view-container">';
-      commentsviewhtml +=
-          '<table class="table-detail-view">' +
-            '<tbody>'
-      for (var i = 0; i < 5; i ++) {
-        commentsviewhtml += '<tr classs="tr-comments-detail-view">'
-        if (i < numberofcomments) {
-          var comment = comments[commentkeys[i]]['comment'];
-          var commentrating = comments[commentkeys[i]]['rating'];
-          commentsviewhtml +=
-            '<td class="td-comments-detail-stars-view">' +
-              fillStars(commentrating) +
-            '</td>'+
-            '<td class="td-comments-detail-comment-view">' +
-              comment +
-            '</td>';
-        } else {
-          commentsviewhtml += '<td></td><td></td>'
+      function setGoogleMapInfoIntoEditor(tabledata) {
+        setGeneralInfo(tabledata);
+        var commentseditorhtml = createCommentsEditorTable(tabledata);
+        $("#comments-info-editor-layout").empty();
+        $("#comments-info-editor-layout").append(commentseditorhtml);
+
+        var imageviewhtml = createImagesEditorTable(tabledata);
+        $("#images-info-editor-layout").empty();
+        $("#images-info-editor-layout").append(imageviewhtml)
+        // var commentseditorhtml = createCommentsUpdateTable(tabledata);
+        // $("#tableinfo").append(commentseditorhtml);
+      }
+
+      function setGeneralInfo(tabledata) {
+        var tablelat = tabledata.latitude;
+        var tablelng = tabledata.longitude;
+        var tablenumtables = String(tabledata.numberOfTables);
+        var tablereservation = String(tabledata.reserve);
+        var tableverified = String(tabledata.verified);
+        var tablecovered = String(tabledata.covered);
+        var tablewater = String(tabledata.water);
+        var tablerestrooms = String(tabledata.restroom);
+        var tablewifi = String(tabledata.wifi);
+        var tablehandicap = String(tabledata.handicap);
+        var tablepet = String(tabledata.pet);
+        var tablerv = String(tabledata.rv);
+        var tablevending = String(tabledata.vending);
+        var tablerating = tabledata.rating;
+        var tableavgstars = String(tablerating.avgstars);
+
+        document.getElementById("tablelat").value = tablelat;
+        document.getElementById("tablelng").value = tablelng;
+        document.getElementById("update").disabled = false;
+        document.getElementById("update").style.backgroundColor = '#0F0';
+        document.getElementById("delete").disabled = false;
+        document.getElementById("delete").style.backgroundColor = '#F00';
+        document.getElementById("numtables").disabled = false;
+        if (document.getElementById(tablenumtables.replace(/ /g,'')) !== null) {
+          document.getElementById(tablenumtables.replace(/ /g,'')).selected = "true";
         }
-        commentsviewhtml += '</tr>';
+        document.getElementById("reservation").disabled = false;
+        document.getElementById("reservation").checked = (tablereservation === 'true');
+        document.getElementById("tablerating").disabled = false;
+        document.getElementById(tableavgstars.replace(/ /g,'') + 'stars').selected = "true";
+        if(tableverified == "true") {
+          document.getElementById("verified").checked = true;
+        } else {
+          document.getElementById("verified").checked = false;
+        }
+        if(tablecovered == "true") {
+          document.getElementById("covered").checked = true;
+        } else {
+          document.getElementById("covered").checked = false;
+        }
+        if(tablewater == "true") {
+          document.getElementById("water").checked = true;
+        } else {
+          document.getElementById("water").checked = false;
+        }
+        if(tablerestrooms == "true") {
+          document.getElementById("restrooms").checked = true;
+        } else {
+          document.getElementById("restrooms").checked = false;
+        }
+        if(tablewifi == "true") {
+          document.getElementById("wifi").checked = true;
+        } else {
+          document.getElementById("wifi").checked = false;
+        }
+        if(tablehandicap == "true") {
+          document.getElementById("handicap").checked = true;
+        } else {
+          document.getElementById("handicap").checked = false;
+        }
+        if(tablepet == "true") {
+          document.getElementById("pet").checked = true;
+        } else {
+          document.getElementById("pet").checked = false;
+        }
+        if(tablerv == "true") {
+          document.getElementById("rv").checked = true;
+        } else {
+          document.getElementById("rv").checked = false;
+        }
+        if(tablevending == "true") {
+          document.getElementById("vending").checked = true;
+        } else {
+          document.getElementById("vending").checked = false;
+        }
       }
-      commentsviewhtml +=
-            '</tbody>' +
-          '</table>' +
-        '</div>'; // comments-detail-view-container
 
-      return commentsviewhtml;
-    }
-
-    function createCommentsUpdateTable(tabledata) {
-      // Get comments
-      var comments = tabledata.comments
-      var commentkeys;
-      var numberofcomments;
-      if (comments === undefined) {
-        numberofcomments = 0;
-      } else {
-        commentkeys = Object.keys(comments);
-        numberofcomments = commentkeys.length;
+      function setUpdateEventOfEditor(marker, tableref) {
+        document.getElementById('update').onclick = function() {
+          // Read inputs from HTML elements and update database
+          var tablelat = document.getElementById("tablelat").value;
+          var tablelng = document.getElementById("tablelng").value;
+          var tablenumtables = document.getElementById("numtables").value;
+          var tablereservation = document.getElementById("reservation").checked;
+          var tableverified = document.getElementById("verified").checked;
+          var tablecovered = document.getElementById("covered").checked;
+          var tablewater = document.getElementById("water").checked;
+          var tablerestrooms = document.getElementById("restrooms").checked;
+          var tablewifi = document.getElementById("wifi").checked;
+          var tablehandicap = document.getElementById("handicap").checked;
+          var tablepet = document.getElementById("pet").checked;
+          var tablerv = document.getElementById("rv").checked;
+          var tablevending = document.getElementById("vending").checked;
+          var tableavgstars = Number.parseInt(document.getElementById("tablerating").value);
+          var tablerating = {};
+          for(var i = 1; i < 6; i ++) {
+            tablerating[i + 'stars'] = (i == tableavgstars ? 1: 0);
+          }
+          tablerating['avgstars'] = tableavgstars;
+          console.log(tablelat,tablelng,tablenumtables,tablereservation,tableverified,
+  						tablecovered,tablewater,tablerestrooms,tablewifi,tablehandicap,tablepet,tablerv,
+  						tablevending, tableavgstars, tablerating);
+          // Check validation
+          var updatedata = {
+            // latitude: parseFloat(tablelat),
+            // longitude: parseFloat(tablelng),
+            numberOfTables: tablenumtables,
+            reserve: tablereservation,
+            verified: tableverified,
+            covered: tablecovered,
+            water: tablewater,
+            restroom: tablerestrooms,
+            wifi: tablewifi,
+            handicap: tablehandicap,
+            pet: tablepet,
+            rv: tablerv,
+            vending: tablevending,
+            rating: tablerating
+          };
+          // Update every data
+          tableref.update(updatedata);
+        };
       }
 
-      // Create bottom. a table of comments detail view
-      var commentsviewhtml = '<div class="comments-editor-container">';
-      commentsviewhtml +=
-          '<table class="table-detail-view" border="0" cellpadding="0" cellspacing="0">' +
-            '<tbody>'
-      for (var i = 0; i < 5; i ++) {
-        commentsviewhtml += '<tr classs="tr-comments-detail-view">'
-        if (i < numberofcomments) {
+      function setDeleteEventOfEditor(marker, tableref) {
+        document.getElementById('delete').onclick = function() {
+          // remove marker from map
+          marker.setMap(null);
+          // delete current database record
+          tableref.remove();
+        };
+      }
+
+      function addAllImagesTag(tabledata) {
+        var images = tabledata.images;
+        var imagekeys;
+        var numberofimages;
+        if (images === undefined) {
+          numberofimages = 0;
+        } else {
+          imagekeys = Object.keys(images);
+          numberofimages = imagekeys.length;
+        }
+
+        var imageviewhtml = '';
+        for (var i = 0; i < numberofimages; i++) {
+          imageviewhtml += '<a href="' + images[imagekeys[i]] + '" data-lightbox="roadtrip">' +
+            '<img id="gm-style-image" style="image-orientation: from-image" width="100%" src="' +
+              images[imagekeys[i]] + '"' + (i > 0 ? ' hidden' : '') + '></a>';
+        }
+
+        return imageviewhtml;
+      }
+
+      function detailView() {
+        // Create top. a table of average stars view
+        var avgstartsviewhtml = createAverageStarDetailViewTable(gtabledata);
+        // Create middle. a table of stars detail view
+        var startsviewhtml = createStarsDetailViewTable(gtabledata);
+        // Create bottom. a table of comments detail view
+        var commentsviewhtml = createCommentsDetailViewTable(gtabledata);
+        // Create close button
+        var closebuttonhtml = createCloseButtonForDetailView();
+        // Add three tables
+        $("#stars-detail-view")
+          .append(closebuttonhtml)
+          .append(avgstartsviewhtml)
+          .append(startsviewhtml)
+          .append(commentsviewhtml);
+        // Show detail views as popup dialog
+        detailViewPopup = $("#stars-detail-view").lightbox_me({
+          centered: true,
+          preventScroll: true,
+          overlayCSS:	{background: 'black', opacity: .8},
+          onLoad: function() {
+            $("#stars-detail-view").find("input:first").focus();
+          },
+          onClose: function() {
+            $("#stars-detail-view").empty();
+          }
+        });
+      }
+
+      function fillStars(count) {
+        var fillstarshtml = '<ul class="rating">';
+        for (var i = 0; i < 5; i ++) {
+          if (i < count) {
+            fillstarshtml += '<li class="rating-small-li"><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>';
+          } else {
+            fillstarshtml +=  '<li class="rating-small-li"><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>';
+          }
+        }
+        fillstarshtml += '</ul>'
+
+        return fillstarshtml;
+      }
+
+      function fillStarsForEditor(count, key) {
+        // var fillstarshtml = '<ul class="rating" id="tablecommentrating-"' + key + '>';
+        var fillstarshtml = '<div class="setrating" id='+ key + '>';
+        for (var i = 5 ; i >= 1; i --) {
+          fillstarshtml +=
+            '<input type="radio" id="star'+ i + '" name="rating" value="'+ i +'" ' + (i >= count ? 'checked' : '') + '/>' +
+            '<label for="star' + i + '"></label>';
+        }
+        fillstarshtml += '</div>';
+        return fillstarshtml;
+      }
+
+      function createAverageStarDetailViewTable(tabledata) {
+        var rating = tabledata.rating;
+        var avgstars = rating.avgstars;
+        var strAvgstars = Number.parseFloat(avgstars).toFixed(2);
+
+        // Set stars
+        var starts = new Array(5);
+        for (var i = 0; i < 5; i++) {
+          if (i < avgstars) {
+            starts[i] = '<li class="rating-li"><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>';
+          } else {
+            starts[i] = '<li class="rating-li"><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>';
+          }
+        }
+
+        var avgstartsviewhtml = '<div class="avgstars-detail-view-container">';
+        avgstartsviewhtml +=
+            '<table class="table-avgstars-detail-view" border="0">' +
+              '<tbody>' +
+                '<tr>'+
+                  '<td class="table-avgstars-detail-view-td-title">'+
+                    "Table Ratings" +
+                  '</td>'+
+                '</tr>'+
+                '<tr class="tr-avgstars-detail-view">' +
+                  '<td class="td-avgstars-detail-view">' +
+                    '<ul class="rating">' +
+                        starts[0] +
+                        starts[1] +
+                        starts[2] +
+                        starts[3] +
+                        starts[4] +
+                    '</ul>' +
+                  '</td>'+
+                  '<td class="td-star-value">' +
+                    strAvgstars + ' stars' +
+                  '</td>' +
+                '</tr>';
+        avgstartsviewhtml +=
+              '<tr>' +
+                '<td class="table-avgstars-detail-view-td-title">' +
+                  strAvgstars + " out of 5 stars"
+                '</td>' +
+              '</tr>';
+             '</tbody>' +
+           '</table>' +
+         '</div>'; // avgstars-detail-view-container
+
+        return avgstartsviewhtml;
+      }
+
+      function createStarsDetailViewTable(tabledata) {
+        var rating = tabledata.rating;
+        var avgstars = rating.avgstars;
+        var startsviewhtml = '<div class="stars-detail-view-container">';
+
+        startsviewhtml +=
+          '<table class="table-stars-detail-view" border="0" cellpadding="0" cellspacing="0">' +
+            '<tbody>';
+         for (var i = 4; i >= 0; i --) {
+           startsviewhtml +=
+             '<tr>' +
+               '<td width="30%">' +
+                 fillStars(i + 1) +
+               '</td>' +
+               '<td class="td-star-value" style="color: #090; font-size: 19px; text-align: -webkit-left; vertical-align: middle; font-weight: 100; letter-spacing: 1px; padding-left: 13px;">' +
+                 (i == (avgstars - 1)  ? '1 ratings - 100%' : '0 ratings - 0%');
+               '</td>' +
+             '</tr>';
+         }
+        startsviewhtml +=
+             '</tbody>' +
+           '</table>' +
+         '</div>'; // stars-detail-view-container
+
+        return startsviewhtml;
+      }
+
+      function createCommentsDetailViewTable(tabledata) {
+        // Get comments
+        var comments = tabledata.comments
+        var commentkeys;
+        var numberofcomments;
+        if (comments === undefined) {
+          numberofcomments = 0;
+        } else {
+          commentkeys = Object.keys(comments);
+          numberofcomments = commentkeys.length;
+        }
+
+        // Create bottom. a table of comments detail view
+        var commentsviewhtml = '<div class="comments-detail-view-container">';
+        commentsviewhtml +=
+            '<table class="table-detail-view">' +
+              '<tbody>'
+        for (var i = 0; i < 5; i ++) {
+          commentsviewhtml += '<tr classs="tr-comments-detail-view">'
+          if (i < numberofcomments) {
+            var comment = comments[commentkeys[i]]['comment'];
+            var commentrating = comments[commentkeys[i]]['rating'];
+            commentsviewhtml +=
+              '<td class="td-comments-detail-stars-view">' +
+                fillStars(commentrating) +
+              '</td>'+
+              '<td class="td-comments-detail-comment-view">' +
+                comment +
+              '</td>';
+          } else {
+            commentsviewhtml += '<td></td><td></td>'
+          }
+          commentsviewhtml += '</tr>';
+        }
+        commentsviewhtml +=
+              '</tbody>' +
+            '</table>' +
+          '</div>'; // comments-detail-view-container
+
+        return commentsviewhtml;
+      }
+
+      function createCommentsEditorTable(tabledata) {
+        // Get comments
+        var comments = tabledata.comments
+        var commentkeys;
+        var numberofcomments;
+        if (comments === undefined) {
+          numberofcomments = 0;
+        } else {
+          commentkeys = Object.keys(comments);
+          numberofcomments = commentkeys.length;
+        }
+
+        // Create bottom. a table of comments detail view
+        var commentsviewhtml = '';
+        commentsviewhtml +=
+            '<table border=10 align="center">' +
+              '<tbody>' +
+                '<tr>' +
+                  '<td class="td-comments-editor-rating-title"><label>Rating</label></td>' +
+                  '<td class="td-comments-editor-comment-title"><label>Comment</label></td>' +
+                  '<td class="td-comments-editor-comment-title"></td>' +
+                '</tr>';
+
+        for (var i = 0; i < numberofcomments; i ++) {
+          commentsviewhtml += '<tr classs="tr-comments-detail-view">'
           var comment = comments[commentkeys[i]]['comment'];
           var commentrating = comments[commentkeys[i]]['rating'];
           commentsviewhtml +=
             '<td classs="td-comments-detail-stars-view">' +
-              fillStars(commentrating) +
-            '</td>'+
+              fillStarsForEditor(commentrating, commentkeys[i])  +
+            '</td>' +
             '<td class="td-comments-detail-comment-view">' +
-              comment +
+              '<textarea rows="3" id="tablecomment-' + commentkeys[i] + '">' + comment + '</textarea>' +
+            '</td>' +
+            '<td class="td-comments-detail-comment-delete">' +
+              '<i class="fa fa-remove" style="font-size:24px;color:red"></i>' +
             '</td>';
-        } else {
-          commentsviewhtml += '<td></td><td></td>'
+          commentsviewhtml += '</tr>';
         }
-        commentsviewhtml += '</tr>';
+        if (numberofcomments == 0) {
+          commentsviewhtml += '<tr><td></td></tr>';
+        }
+        commentsviewhtml +=
+              '</tbody>' +
+            '</table>';
+
+        return commentsviewhtml;
       }
-      commentsviewhtml +=
-            '</tbody>' +
-          '</table>' +
-        '</div>'; // comments-detail-view-container
 
-      return commentsviewhtml;
-    }
+      function createImagesEditorTable(tabledata) {
+        var images = tabledata.images;
+        var imagekeys;
+        var numberofimages;
+        if (images === undefined) {
+          numberofimages = 0;
+        } else {
+          imagekeys = Object.keys(images);
+          numberofimages = imagekeys.length;
+        }
 
-    function createCloseButtonForDetailView() {
-      var closebuttonhtml = '<div style="text-align: right; padding-bottom: 2px;">';
-      closebuttonhtml += '<a href="#" class="close-detail-view" id="close-detail-view">';
-      closebuttonhtml += '<img class="close-image" src="images/close.png" onclick="closeDetailView()"></img>';
-      closebuttonhtml += '</a>';
-      closebuttonhtml += '</div>';
+        var imageviewhtml =
+        '<table border=10 align="center">' +
+          '<tbody>' +
+            '<tr>' +
+              '<td class="td-comments-editor-rating-title"><label>Images</label></td>' +
+              '<td class="td-comments-editor-comment-title"></td>' +
+            '</tr>';
 
-      return closebuttonhtml;
-    }
+        for (var i = 0; i < numberofimages; i++) {
+          imageviewhtml +=
+            '<tr classs="tr-comments-detail-view">' +
+              '<td classs="td-comments-detail-stars-view">' +
+                '<img id="editor-image' + i + '" style="image-orientation: from-image" width="100%" src="' +
+                  images[imagekeys[i]] + '">' +
+              '</td>' +
+              '<td class="td-comments-detail-comment-delete">' +
+                '<i class="fa fa-remove" style="font-size:24px;color:red"></i>' +
+              '</td>' +
+            '</tr>';
+        }
+        if (numberofimages == 0) {
+          imageviewhtml += '<tr><td></td><td></td></tr>';
+        }
+        imageviewhtml +=
+              '</tbody>' +
+            '</table>';
 
-    function closeDetailView() {
-      if (detailViewPopup != null) {
-        detailViewPopup.trigger('close');
+        return imageviewhtml;
       }
-    }
 
-    lightbox.option({
-      'resizeDuration': 200,
-      'wrapAround': true
-    });
+      function createCloseButtonForDetailView() {
+        var closebuttonhtml = '<div style="text-align: right; padding-bottom: 2px;">';
+        closebuttonhtml += '<a href="#" class="close-detail-view" id="close-detail-view">';
+        closebuttonhtml += '<img class="close-image" src="images/close.png" onclick="closeDetailView()"></img>';
+        closebuttonhtml += '</a>';
+        closebuttonhtml += '</div>';
 
-  </script>
+        return closebuttonhtml;
+      }
 
-  <script async defer
-	 src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB7qx71V9N8PfDtWkBkzv2DEi_j8GaqQg4&callback=initMap">
-	</script>
+      function closeDetailView() {
+        if (detailViewPopup != null) {
+          detailViewPopup.trigger('close');
+        }
+      }
+
+    </script>
+    <script>
+      lightbox.option({
+        'resizeDuration': 200,
+        'wrapAround': true
+      });
+    </script>
+    <script async defer
+  	 src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB7qx71V9N8PfDtWkBkzv2DEi_j8GaqQg4&callback=initMap">
+  	</script>
   </body>
 </html>
